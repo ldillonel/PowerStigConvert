@@ -7,7 +7,7 @@ using module .\StigClass.psm1
 .$PSScriptRoot\..\common\data.ps1
 #endregion
 #region Class Definition
-Class SqlScriptRule : STIG
+Class SqlScriptQueryRule : STIG
 {
     [string] $GetScript
 
@@ -16,7 +16,7 @@ Class SqlScriptRule : STIG
     [string] $SetScript
 
     # Constructors
-    SqlScriptRule ( [xml.xmlelement] $StigRule )
+    SqlScriptQueryRule ( [xml.xmlelement] $StigRule )
     {
         $this.InvokeClass( $StigRule )
     }

@@ -4,10 +4,8 @@
 #region Header
 using module .\StigClass.psm1
 using module ..\common\enum.psm1
-
 . $PSScriptRoot\..\common\data.ps1
-#endregion Header
-
+#endregion
 #region Class Definition
 Class DnsServerSettingRule : STIG
 {
@@ -42,8 +40,7 @@ Class DnsServerSettingRule : STIG
         }
     }
 }
-#endregion Class Definition
-
+#endregion
 #region Method Functions
 <#
     .SYNOPSIS
@@ -116,4 +113,4 @@ function Get-DnsServerSettingPropertyValue
 
     return $dnsServerSettingPropertyValue
 }
-#endregion Method Functions
+#endregion

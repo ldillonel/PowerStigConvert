@@ -8,7 +8,7 @@ using module .\StigClass.psm1
 #region Class Definition
 Class WmiRule : STIG
 {
-    [string] $Class
+    [string] $Query
     [string] $Property
     [string] $Value
     [string] $Operator
@@ -21,6 +21,4 @@ Class WmiRule : STIG
 
     # Methods
 }
-#endregion
-#region Method Functions
 #endregion

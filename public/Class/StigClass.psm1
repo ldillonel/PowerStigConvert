@@ -265,7 +265,9 @@ function Get-RuleTypeMatchList
             $PSItem -Match 'Logging' -and
             $PSItem -Match 'IIS 8\.5' -and
             $PSItem -NotMatch 'review source IP' -and
-            $PSItem -NotMatch 'verify only authorized groups'
+            $PSItem -NotMatch 'verify only authorized groups' -and
+            $PSItem -NotMatch 'consult with the System Administrator to review' -and
+            $PSItem -Notmatch 'If an account associated with roles other than auditors'
         }
         {
             [void] $ruleTypeList.Add( [RuleType]::IisLoggingRule )
@@ -289,7 +291,13 @@ function Get-RuleTypeMatchList
             $PSItem -NotMatch 'IIS 8\.5 web' -and
             $PSItem -cNotmatch 'SELECT' -and
             $PSItem -NotMatch 'SQL Server' -and
-            $PSItem -NotMatch 'user\srights\sand\spermissions'
+            $PSItem -NotMatch 'user\srights\sand\spermissions' -and
+            $PSItem -NotMatch 'Query the SA' -and
+            $PSItem -NotMatch "caspol\.exe" -and
+            $PSItem -NotMatch "Select the Group Policy object in the left pane" -and
+            $PSItem -NotMatch "Deny log on through Remote Desktop Services" -and
+            $PSItem -NotMatch "Interview the IAM" -and
+            $PSItem -NotMatch "InetMgr\.exe"
         }
         {
             [void] $ruleTypeList.Add( [RuleType]::PermissionRule )
@@ -343,7 +351,7 @@ function Get-RuleTypeMatchList
             $PSItem -NotMatch "'Alter any availability group' permission"
         }
         {
-            [void] $ruleTypeList.Add( [RuleType]::SqlScriptRule )
+            [void] $ruleTypeList.Add( [RuleType]::SqlScriptQueryRule )
             $parsed = $true
         }
         {
@@ -383,7 +391,14 @@ function Get-RuleTypeMatchList
                 $PSItem -NotMatch 'Physical Path' -and
                 $PSItem -NotMatch 'script extensions' -and
                 $PSItem -NotMatch 'recycl' -and
-                $PSItem -NotMatch 'WebDAV'
+                $PSItem -NotMatch 'WebDAV' -and
+                $PSItem -NotMatch 'Review the local users' -and
+                $PSItem -NotMatch 'System Administrator' -and
+                $PSItem -NotMatch 'are not restrictive enough to prevent connections from nonsecure zones' -and
+                $PSItem -NotMatch 'verify the certificate path is to a DoD root CA' -and
+                $PSItem -NotMatch 'HKLM' -and
+                $PSItem -NotMatch 'Authorization Rules' -and
+                $PSItem -NotMatch 'regedit <enter>'
             )
         }
         {
@@ -391,7 +406,8 @@ function Get-RuleTypeMatchList
             $parsed = $true
         }
         {
-            $PSItem -Match '(Get-Windows(Optional)?Feature|is not installed by default)' -and
+            $PSItem -Match '(Get-Windows(Optional)?Feature|is not installed by default)' -or
+            $PSItem -Match 'WebDAV Authoring Rules' -and
             $PSItem -NotMatch 'HKEY_LOCAL_MACHINE'
         }
         {
@@ -444,7 +460,11 @@ function Get-RuleTypeMatchList
             needs to be at th end of the swtich as a catch all for documentation rules.
         #>
         {
-            $PSItem -Match "Document(ation)?" -and $PSItem -NotMatch "resourceSACL|Disk Management"
+            $PSItem -Match "Document(ation)?" -and
+            $PSItem -NotMatch "resourceSACL|Disk Management" -and
+            $PSItem -NotMatch "Caspol\.exe" -and
+            $PSItem -NotMatch "Examine the \.NET CLR configuration files" -and
+            $PSItem -NotMatch "\*\.exe\.config"
         }
         {
             [void] $ruleTypeList.Add( [RuleType]::DocumentRule )
@@ -483,6 +503,10 @@ function Get-StigRuleResource
                 return Get-PermissionRuleDscResource -Path $Path
             }
         }
+        'IISLoggingRUle'
+        {
+            return Get-IISLoggingRuleDscResource -StigTitle $global:stigTitle
+        }
         'WindowsFeature'
         {
             return 'WindowsOptionalFeature'
@@ -499,10 +523,36 @@ function Get-StigRuleResource
         Returns the name of the DSC resource used to handle the specific rule
 
     .PARAMETER Path
+        Stig Title for the DSC Resource
+
+    .EXAMPLE
+        Get-IISLoggingRuleDscResource -StigTitle "IIS 8.5 Server Security Technical Implementation Guide"
+#>
+function Get-IISLoggingRuleDscResource {
+    param
+    (
+        [parameter(Mandatory = $true)]
+        [AllowEmptyString()]
+        [String]
+        $StigTitle
+    )
+
+    if ($StigTitle -match "Server") {
+        return "xIISLogging"
+    }
+
+    return "XWebsite"
+}
+
+<#
+    .SYNOPSIS
+        Returns the name of the DSC resource used to handle the specific rule
+
+    .PARAMETER Path
         Path value for the permission rule
 
     .EXAMPLE
-        Get-PermissionRuleDscResource -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurePipeServers\winreg\"
+    Get-PermissionRuleDscResource -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurePipeServers\winreg\"
 #>
 function Get-PermissionRuleDscResource
 {

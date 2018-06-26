@@ -4,7 +4,6 @@
 #region Header
 using module ..\common\enum.psm1
 using module .\StigClass.psm1
-
 Import-Module $PSScriptRoot\..\..\private\common\singleLineRegistryRule.psm1
 . $PSScriptRoot\..\common\data.ps1
 . $PSScriptRoot\..\data\data.Registry.ps1
@@ -158,7 +157,7 @@ function Get-RegistryKey
     $result = @()
     if (Test-SingleLineRegistryRule -CheckContent $CheckContent)
     {
-        Get-SingleLineRegistryPath  -CheckContent $CheckContent
+        Get-SingleLineRegistryPath -CheckContent $CheckContent
     }
     else
     {
@@ -173,6 +172,7 @@ function Get-RegistryKey
             $result += ($registryHive + $path)
         }
     }
+
     $result
 }
 

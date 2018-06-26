@@ -4,9 +4,8 @@
 #region Header
 using module .\StigClass.psm1
 using module ..\common\enum.psm1
-
 . $PSScriptRoot\..\data\data.Web.ps1
-#endregion Header
+#endregion
 #region Class Definition
 Class MimeTypeRule : STIG
 {

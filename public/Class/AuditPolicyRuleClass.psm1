@@ -30,7 +30,7 @@ Class AuditPolicyRule : STIG
         }
     }
 
-	[void] SetAuditFlag ()
+    [void] SetAuditFlag ()
     {
         $thisAuditFlag = Get-AuditPolicyFlag -CheckContent $this.SplitCheckContent
 

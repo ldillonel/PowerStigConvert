@@ -4,9 +4,8 @@
 #region Header
 using module ..\common\enum.psm1
 using module .\StigClass.psm1
-
 . $PSScriptRoot\..\common\data.ps1
-#endregion Header
+#endregion
 #region Class Definition
 Class GroupRule:STIG
 {

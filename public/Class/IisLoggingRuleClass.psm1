@@ -4,10 +4,8 @@
 #region Header
 using module .\StigClass.psm1
 using module ..\common\enum.psm1
-
 . $PSScriptRoot\..\data\data.Web.ps1
-#endregion Header
-
+#endregion
 #region Class Definition
 Class IisLoggingRule : STIG
 {
@@ -95,6 +93,7 @@ Class IisLoggingRule : STIG
 }
 #endregion
 #region Method Functions
+
 <#
 .SYNOPSIS
     Returns the log format.
@@ -281,6 +280,7 @@ function Get-LogFlagValue
     Param
     (
         [Parameter(Mandatory = $true)]
+        [AllowEmptyString()]
         [string[]]
         $LogFlags
     )

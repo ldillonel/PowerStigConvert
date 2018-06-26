@@ -4,9 +4,8 @@
 #region Header
 using module ..\common\enum.psm1
 using module .\StigClass.psm1
-
 . $PSScriptRoot\..\common\data.ps1
-#endregion Header
+#endregion
 #region Data Section
 data ServicesDisplayNameToName
 {
@@ -21,7 +20,7 @@ data ServicesDisplayNameToName
         Windows Time = W32Time
 '@
 }
-#endregion Data Section
+#endregion
 #region Class Definition
 Class ServiceRule : STIG
 {
@@ -79,7 +78,7 @@ Class ServiceRule : STIG
         return ( Split-MultipleServiceRule -ServiceName $Servicename )
     }
 }
-#endregion Class Definition
+#endregion
 #region Method Functions
 <#
     .SYNOPSIS
@@ -287,4 +286,4 @@ function Split-MultipleServiceRule
     return ( $ServiceName -split ',' )
 }
 
-#endregion Method Functions
+#endregion

@@ -7,13 +7,13 @@ using module .\StigClass.psm1
 using module ..\..\private\common\rangeConversion.psm1
 . $PSScriptRoot\..\common\data.ps1
 #endregion
-#region - Data Section
+#region Data Section
 $PolicyNameFixes = @{
     'Minimum password length,'                   = 'Minimum password length'
     'Store password using reversible encryption' = 'Store passwords using reversible encryption'
 }
 #endregion
-#region - Class Definition
+#region Class Definition
 Class AccountPolicyRule : STIG
 {
     # Properties
@@ -72,7 +72,7 @@ Class AccountPolicyRule : STIG
     }
 }
 #endregion
-#region - Method Functions
+#region Method Functions
 <#
     .SYNOPSIS
         Parses Check-Content element to retrieve the Account Policy name

@@ -5,7 +5,7 @@
 using module ..\common\enum.psm1
 using module .\StigClass.psm1
 . $PSScriptRoot\..\common\data.ps1
-#endregion Header
+#endregion
 #region Class Definition
 Class PermissionRule : STIG
 {
@@ -40,15 +40,20 @@ Class PermissionRule : STIG
     {
         $thisAccessControlEntry = Get-PermissionAccessControlEntry -StigString $this.SplitCheckContent
 
-        if ( -not [string]::IsNullOrEmpty( $thisAccessControlEntry ) )
+        if ( -not $this.SetStatus( $thisAccessControlEntry ) )
         {
             foreach( $Principal in $thisAccessControlEntry.Principal )
             {
                 $this.SetStatus( $Principal )
             }
 
-            foreach( $Rights in $thisAccessControlEntry.Rights )
+            foreach ( $Rights in $thisAccessControlEntry.Rights )
             {
+                if ( $Rights -eq 'blank' )
+                {
+                    $this.SetStatus( "", $true )
+                    continue
+                }
                 $this.SetStatus( $Rights )
             }
 
@@ -67,7 +72,7 @@ Class PermissionRule : STIG
         return ( Split-MultiplePermissionRule -CheckContent ($CheckContent -split '\n') )
     }
 }
-#endregion Class Definition
+#endregion
 #region Method Functions
 <#
     .SYNOPSIS
@@ -90,7 +95,7 @@ function Get-PermissionTargetPath
     switch ($StigString)
     {
         # Do not use $env: for environment variables. They will not be able to be converted to text for XML.
-        # get path for permissions that pertain to event logs
+        # get path for permissions that pertains to event logs
         { $stigString -match $script:RegularExpression.WinEvtDirectory }
         {
             $parentheseMatch = $StigString | Select-String -Pattern $script:RegularExpression.textBetweenParentheses
@@ -108,14 +113,14 @@ function Get-PermissionTargetPath
             break
         }
 
-        # get path for permissions that pertain to eventvwr.exe
+        # get path for permissions that pertains to eventvwr.exe
         { $StigString -match $script:RegularExpression.eventViewer }
         {
             $permissionTargetPath = '%windir%\SYSTEM32\eventvwr.exe'
             break
         }
 
-        # get path that pertain to C:\
+        # get path that pertains to C:\
 
         { $StigString -match $script:RegularExpression.cDrive }
         {
@@ -123,14 +128,14 @@ function Get-PermissionTargetPath
             break
         }
 
-        # get path that pertain to Sysvol
+        # get path that pertains to Sysvol
         { $StigString -match $script:RegularExpression.SysVol}
         {
             $permissionTargetPath = '%windir%\sysvol'
             break
         }
 
-        # get path that pertain to  C:\Windows
+        # get path that pertains to  C:\Windows
         { $StigString -match $script:RegularExpression.systemRoot }
         {
             $permissionTargetPath = '%windir%'
@@ -179,7 +184,7 @@ function Get-PermissionTargetPath
             break
         }
 
-        # get path that pertain to Admin Shares
+        # get path that pertains to Admin Shares
         { $StigString -match $Script:RegularExpression.adminShares }
         {
             $permissionTargetPath = $null
@@ -255,6 +260,11 @@ function Get-PermissionTargetPath
             $permissionTargetPath = '%ProgramFiles(x86)%'
             break
         }
+        { $stigString -match $script:RegularExpression.inetpub }
+        {
+            $permissionTargetPath = '%windir%\inetpub'
+            break
+        }
 
         default
         {
@@ -308,6 +318,21 @@ function Get-PermissionAccessControlEntry
         {
             $cryptoFolderStigString = "SYSTEM, Administrators - Full Control - This folder, subfolders and files"
             return ConvertTo-AccessControlEntry -StigString $cryptoFolderStigString
+        }
+
+        { $StigString -match $script:RegularExpression.inetpub }
+        {
+            # in IIS Server Stig rule V-76745 says creator/owner should have special permissions to subkeys so we ignore it. All rules that are properly documented are converted
+            $inetpubFolderStigString = @()
+            foreach ($line in $stigString)
+            {
+                if ($line -notMatch "Creator/Owner" -and $line -match ":")
+                {
+                    $inetpubFolderStigString += ($line -replace ': ', ' - ') -replace '\(built-in security group\)'
+                }
+            }
+
+            return ConvertTo-AccessControlEntry -StigString $inetpubFolderStigString
         }
 
         default
@@ -529,6 +554,10 @@ function Convert-RightsConstant
                 {
                     $values += $script:fileRightsConstant[$right.trim()]
                 }
+                '(blank)'
+                {
+                    $values += $script:activeDirectoryRightsConstant[$right.trim()]
+                }
             }
         }
     }
@@ -639,7 +668,6 @@ function Get-ForcePrincipal
     )
 
     # Setting default value for the time being. In the future additional logic could be added here in order to dynamically determine what this should be.
-
     return $false
 }
 
@@ -684,4 +712,4 @@ function Join-CheckContent
 
     return $stringBuilder.ToString()
 }
-#endregion Function Methods
+#endregion

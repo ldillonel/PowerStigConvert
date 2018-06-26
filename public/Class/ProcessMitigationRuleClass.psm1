@@ -255,4 +255,4 @@ function Test-MultipleProcessMitigationRule
     }
     return $false
 }
-#endregion Method Functions
+#endregion

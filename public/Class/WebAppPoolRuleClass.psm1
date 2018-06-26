@@ -4,7 +4,7 @@
 #region Header
 using module .\StigClass.psm1
 using module ..\common\enum.psm1
-#endregion Header
+#endregion
 #region Class Definition
 Class WebAppPoolRule : STIG
 {
@@ -52,7 +52,7 @@ Class WebAppPoolRule : STIG
     }
 }
 #endregion
-#region Method functions
+#region Method Functions
 <#
 .SYNOPSIS
     Returns the key and value properties for the STIG rule.
