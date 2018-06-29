@@ -1,5 +1,12 @@
+# PowerStigConvert
 
-# Contributing
+master: [![Build status](https://ci.appveyor.com/api/projects/status/4ityu2kvg35844ey/branch/master?svg=true)](https://ci.appveyor.com/project/athaynes/powerstigconvert/branch/master)
+
+dev: [![Build status](https://ci.appveyor.com/api/projects/status/4ityu2kvg35844ey/branch/dev?svg=true)](https://ci.appveyor.com/project/athaynes/powerstigconvert/branch/dev)
+
+PowerStigConvert is a module that attempts to automatically convert the xccdf fiels into a new xml schema that is directly accessible to automated solutions.
+
+## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
