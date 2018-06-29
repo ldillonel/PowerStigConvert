@@ -1,17 +1,21 @@
-#region Header
-. $PSScriptRoot\..\..\..\helper.ps1
-[string] $sut = $MyInvocation.MyCommand.Path -replace '\\tests\\', '\src\' `
-    -replace '\.tests', '' `
-    -replace '\\unit\\', '\' `
-    -replace 'ps1', 'psm1'
-Import-Module $sut -Force
+#region HEADER
+$script:moduleRoot = "$(($PSScriptRoot -split 'PowerStigConvert')[0])PowerStigConvert"
+$script:moduleName = $MyInvocation.MyCommand.Name -replace '\.tests\.ps1', '.psm1'
+$script:modulePath = "$($script:moduleRoot)$(($PSScriptRoot -split 'Unit')[1])\$script:moduleName"
+if ( (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests'))) -or `
+     (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests\TestHelper.psm1'))) )
+{
+    & git @('clone','https://github.com/Microsoft/PowerStig.Tests',(Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests'))
+}
+Import-Module -Name (Join-Path -Path $script:moduleRoot -ChildPath (Join-Path -Path 'PowerStig.Tests' -ChildPath 'TestHelper.psm1')) -Force
+Import-Module $modulePath -Force
 #endregion
-#region Setup
+#region Test Setup
 
-#endregion Setup
+#endregion
 #region Tests
 Describe 'Test-SingleLineRegistryRule' {
-    
+
     It 'Should exist' {
         Get-Command Test-SingleLineRegistryRule | Should Not BeNullOrEmpty
     }
@@ -23,7 +27,7 @@ Describe 'Test-SingleLineRegistryRule' {
     It "Should return $true when 'HKLM\' is found" {
         Test-SingleLineRegistryRule -CheckContent "HKLM\" | Should Be $true
     }
-    
+
     It "Should return $false when 'Permission' is found" {
         Test-SingleLineRegistryRule -CheckContent "Permission" | Should Be $false
     }
@@ -59,12 +63,12 @@ Describe 'Get-SingleLineRegistryPath ' {
 #########################################   Registry Type   ########################################
 Describe "Get-RegistryValueTypeFromSingleLineStig" {
     # A list of the registry types in the STIG(key) to DSC(value) format
-    # this is a seperate list to detect changes in the script 
+    # this is a seperate list to detect changes in the script
     $registryTypes = @(
         'REG_SZ', 'REG_BINARY', 'REG_DWORD', 'REG_QWORD', 'REG_MULTI_SZ', 'REG_EXPAND_SZ'
     )
 
-    foreach ( $registryType in $registryTypes ) 
+    foreach ( $registryType in $registryTypes )
     {
         $checkContent = "Criteria: If the value ""1001"" is $registryType = 3"
         Mock Get-RegistryValueStringFromSingleLineStig {return 'Criteria: If the value ""1001"" is REG_SZ = 3'} -ModuleName singleLineRegistryRule -ParameterFilter {$CheckContent -match 'REG_SZ'}
@@ -89,7 +93,7 @@ Describe "Get-RegistryValueTypeFromSingleLineStig" {
 
 #########################################   Registry Type   ########################################
 #########################################   Registry Name   ########################################
-Describe "Get-RegistryValueNameFromSingleLineStig" { 
+Describe "Get-RegistryValueNameFromSingleLineStig" {
 
     $valueName = 'ValueName'
     $checkContent = "Criteria: If the value ""$valueName"" is REG_Type = 2, this is not a finding."
@@ -103,7 +107,7 @@ Describe "Get-RegistryValueDataFromSingleStig" {
 
     $valueData = '2'
     $checkContent = "Criteria: If the value ""ValueName"" is REG_Type = $valueData, this is not a finding."
-    
+
     It "Should return '$valueData' from '$checkContent'" {
         Get-RegistryValueDataFromSingleStig -CheckContent $checkContent | Should Be $valueData
     }
@@ -111,7 +115,7 @@ Describe "Get-RegistryValueDataFromSingleStig" {
 #########################################   Registry Data   ########################################
 ######################################   Ancillary functions   #####################################
 Describe 'Get-RegistryValueStringFromSingleLineStig' {
-    
+
     $registryValueName = 'XL4Workbooks'
     $registryValueType = 'REG_DWORD'
     $registryValueData = '2'
@@ -119,11 +123,11 @@ Describe 'Get-RegistryValueStringFromSingleLineStig' {
     $registryValueString = "Criteria: If the value $registryValueInnerString, this is not a finding."
     $checkContent = "
     HKCU\Path\to\value
-    
+
     $registryValueString" -Split "\n"
-    
+
     It "Should return the correct full string" {
-        $fullString = Get-RegistryValueStringFromSingleLineStig -CheckContent $checkContent 
+        $fullString = Get-RegistryValueStringFromSingleLineStig -CheckContent $checkContent
         $fullString | Should Be $registryValueString
     }
 
@@ -143,7 +147,7 @@ Describe 'Get-RegistryValueStringFromSingleLineStig' {
     foreach ($stringFormat in $stringFormats)
     {
         It "Should return the correct trimmed string" {
-            $trimmedString = Get-RegistryValueStringFromSingleLineStig -CheckContent $stringFormat -Trim 
+            $trimmedString = Get-RegistryValueStringFromSingleLineStig -CheckContent $stringFormat -Trim
             $trimmedString | Should Be $registryValueInnerString
         }
     }
@@ -151,7 +155,7 @@ Describe 'Get-RegistryValueStringFromSingleLineStig' {
 
     It "Should remove extra spaces from the string" {
         $checkContent = "Criteria: If   the value  XL4Workbooks  is REG_DWORD = 2, this is not a finding."
-    
+
         $trimmedString = Get-RegistryValueStringFromSingleLineStig -CheckContent $checkContent
         $trimmedString | Should Be "Criteria: If the value XL4Workbooks is REG_DWORD = 2, this is not a finding."
     }
@@ -167,7 +171,7 @@ Describe "Test-SingleLineStigFormat" {
     It "Should return $true when match Office format" {
         Test-SingleLineStigFormat -CheckContent $checkContent | Should Be $true
     }
-        
+
     $checkContent = "Registry Hive: HKEY_LOCAL_MACHINE" +
     "Registry Path:  \Path\To\Value"
     It "Should return $false when not match Office foramt" {

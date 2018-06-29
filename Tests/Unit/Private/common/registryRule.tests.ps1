@@ -1,16 +1,20 @@
-#region Header
-. $PSScriptRoot\..\..\..\helper.ps1
-[string] $sut = $MyInvocation.MyCommand.Path -replace '\\tests\\', '\src\' `
-    -replace '\.tests', '' `
-    -replace '\\unit\\', '\' `
-    -replace 'ps1', 'psm1'
-Import-Module $sut
-#endregion Header
+#region HEADER
+$script:moduleRoot = "$(($PSScriptRoot -split 'PowerStigConvert')[0])PowerStigConvert"
+$script:moduleName = $MyInvocation.MyCommand.Name -replace '\.tests\.ps1', '.psm1'
+$script:modulePath = "$($script:moduleRoot)$(($PSScriptRoot -split 'Unit')[1])\$script:moduleName"
+if ( (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests'))) -or `
+     (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests\TestHelper.psm1'))) )
+{
+    & git @('clone','https://github.com/Microsoft/PowerStig.Tests',(Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests'))
+}
+Import-Module -Name (Join-Path -Path $script:moduleRoot -ChildPath (Join-Path -Path 'PowerStig.Tests' -ChildPath 'TestHelper.psm1')) -Force
+Import-Module $modulePath -Force
+#endregion
 #region Test Setup
 $checkContent = @'
 If the following registry value does not exist or is not configured as specified, this is a finding:
 
-Registry Hive: HKEY_LOCAL_MACHINE 
+Registry Hive: HKEY_LOCAL_MACHINE
 Registry Path: \Software\Microsoft\Windows\CurrentVersion\Policies\System\
 
 Value Name: ShutdownWithoutLogon
@@ -18,7 +22,7 @@ Value Name: ShutdownWithoutLogon
 Value Type: REG_DWORD
 Value: 0
 '@
-#endregion Test Setup
+#endregion
 #region Tests
 Describe 'ConvertTo-RegistryRule' {
 

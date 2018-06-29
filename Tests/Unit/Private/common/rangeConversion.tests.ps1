@@ -1,13 +1,17 @@
-#region Header
-. $PSScriptRoot\..\..\..\helper.ps1
-[string] $sut = $MyInvocation.MyCommand.Path -replace '\\tests\\','\src\' `
-                                             -replace '\.tests','' `
-                                             -replace '\\unit\\','\' `
-                                             -replace 'ps1', 'psm1'
-Import-Module $sut -Force
+#region HEADER
+$script:moduleRoot = "$(($PSScriptRoot -split 'PowerStigConvert')[0])PowerStigConvert"
+$script:moduleName = $MyInvocation.MyCommand.Name -replace '\.tests\.ps1', '.psm1'
+$script:modulePath = "$($script:moduleRoot)$(($PSScriptRoot -split 'Unit')[1])\$script:moduleName"
+if ( (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests'))) -or `
+     (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests\TestHelper.psm1'))) )
+{
+    & git @('clone','https://github.com/Microsoft/PowerStig.Tests',(Join-Path -Path $script:moduleRoot -ChildPath 'PowerStig.Tests'))
+}
+Import-Module -Name (Join-Path -Path $script:moduleRoot -ChildPath (Join-Path -Path 'PowerStig.Tests' -ChildPath 'TestHelper.psm1')) -Force
+Import-Module $modulePath -Force
 #endregion
-#region Main
-<# 
+#region Test Setup
+<#
     These are sample values that have been identified in the STIG so far.
     Value:  1 or 2 = a Finding              $i -notmatch "1|2"
     Value: 14 (or greater)                  $i -gt "14"
@@ -20,9 +24,9 @@ Import-Module $sut -Force
     Value: 0x00008000 (32768) (or greater)  $i -ge "32768"
     Value: 0x00030000 (196608) (or greater) $i -ge "196608"
 #>
-
+#region Tests
 Describe 'Get-OrganizationValueTestString' {
-    
+
     Mock Test-StringIsPositiveOr -ModuleName rangeConversion
     Mock Test-StringIsLessThan  -ModuleName rangeConversion
     Mock Test-StringIsLessThanOrEqual  -ModuleName rangeConversion
@@ -52,7 +56,7 @@ Describe 'Get-OrganizationValueTestString' {
 }
 
 Describe 'Get-TestStringTokenNumbers' {
-    
+
     It "Should exist" {
         Get-Command Get-TestStringTokenNumbers | Should Not BeNullOrEmpty
     }
@@ -97,14 +101,14 @@ Describe 'Get-TestStringTokenList' {
             " 0x0000000f (15) (or less)"       = "or less"
             "0x00008000 (32768) (or greater)" = "or greater"
         }
-    
+
         Foreach ($string in $strings.GetEnumerator())
         {
             It "Should return '$($string.Value)' when given '$($string.Key)'" {
                 Get-TestStringTokenList -String $string.Key | Should Be $string.Value
             }
         }
-    } 
+    }
 
     Context 'StringTokens ParameterSet' {
         $strings = @{
@@ -112,7 +116,7 @@ Describe 'Get-TestStringTokenList' {
             '"text1" and "text2" are between quotes' = @('text1','text2')
             '"text1" and "text2" but "text3" are between quotes' = @('text1','text2','text3')
         }
-    
+
         Foreach ($string in $strings.GetEnumerator())
         {
             It "Should return '$($string.Value)' when given '$($string.Key)'" {
@@ -140,7 +144,7 @@ Describe 'ConvertTo-TestString' {
         Mock -CommandName Get-TestStringTokenNumbers `
             -ParameterFilter {$string -eq $string.key} `
             -MockWith {return "30"}
-         
+
         Mock -CommandName Get-TestStringTokenList `
             -ParameterFilter {$string -eq $string.key} `
             -MockWith {return "greater than"}
@@ -249,7 +253,7 @@ Describe 'ConvertTo-OrTestString' {
         Foreach ($positiveMatchString in $positiveMatchStrings.GetEnumerator())
         {
             It "Should return '$($positiveMatchString.Value)' from '$($positiveMatchString.Key)'" {
-                ConvertTo-OrTestString -String $positiveMatchString.Key -Operator $operator | 
+                ConvertTo-OrTestString -String $positiveMatchString.Key -Operator $operator |
                     Should BeExactly $positiveMatchString.Value
             }
         }
@@ -270,7 +274,7 @@ Describe 'ConvertTo-OrTestString' {
         Foreach ($positiveMatchString in $positiveMatchStrings.GetEnumerator())
         {
             It "Should return '$($positiveMatchString.Value)' from '$($positiveMatchString.Key)'" {
-                ConvertTo-OrTestString -String $positiveMatchString.Key -Operator $operator | 
+                ConvertTo-OrTestString -String $positiveMatchString.Key -Operator $operator |
                     Should BeExactly $positiveMatchString.Value
             }
         }
@@ -350,7 +354,7 @@ Describe 'Test-StringIsLessThan' {
         ' less than 90',
         ' less than 90 '
     )
-    
+
     Foreach ($string in $strings)
     {
         It "Should return $true when given '$string'" {
@@ -372,7 +376,7 @@ Describe 'Test-StringIsLessThanOrEqual' {
         ' 0x0000000f (15) (or less)',
         ' 0x0000000f (15) (or less) '
     )
-    
+
     Foreach ($string in $strings)
     {
         It "Should return $true when given '$string'" {
@@ -416,18 +420,18 @@ Describe 'Test-StringIsLessThanOrEqualButNot' {
 #endregion
 #region Multiple Values
 Describe 'Test-StringIsMultipleValue' {
-    
+
         $strings = @(
             'Possible values are NoSync, NTP, NT5DS, AllSync'
         )
-    
+
         Foreach ($string in $strings)
         {
             It "Should return $true when given '$string'" {
                 Test-StringIsMultipleValue -String $string | Should Be $true
             }
         }
-    } 
+    }
 
 Describe 'ConvertTo-MultipleValue' {
     $Strings = @{
@@ -445,23 +449,23 @@ Describe 'ConvertTo-MultipleValue' {
 Describe 'Get-SecurityPolicyString' {
     $checkContent = 'Verify the effective setting in Local Group Policy Editor.
     Run "gpedit.msc".
-    
+
     Navigate to Local Computer Policy &gt;&gt; Computer Configuration &gt;&gt; Windows Settings &gt;&gt; Security Settings &gt;&gt; Account Policies &gt;&gt; Account Lockout Policy.
-    
+
     If the "Account lockout duration" is less than "15" minutes (excluding "0"), this is a finding.'
     $match = '"Account lockout duration" is less than "15" minutes (excluding "0"), this is a finding.'
     It 'Should return the second string in quotes' {
 
-        $checkContent = (Split-TestStrings -CheckContent  $checkContent) 
+        $checkContent = (Split-TestStrings -CheckContent  $checkContent)
         Get-SecurityPolicyString -CheckContent $checkContent | Should Be $match
     }
 }
 Describe 'Test-SecurityPolicyContainsRange' {
     $checkContent = 'Verify the effective setting in Local Group Policy Editor.
     Run "gpedit.msc".
-    
+
     Navigate to Local Computer Policy &gt;&gt; Computer Configuration &gt;&gt; Windows Settings &gt;&gt; Security Settings &gt;&gt; Account Policies &gt;&gt; Account Lockout Policy.
-    
+
     {0}'
     Context 'Match' {
 
@@ -475,18 +479,18 @@ Describe 'Test-SecurityPolicyContainsRange' {
             'If the value for the "Maximum password age" is greater than "60" days, this is a finding.  If the value is set to "0" (never expires), this is a finding.',
             'If the value for "Accounts: Rename administrator account" is not set to a value other than "Administrator", this is a finding.'
         )
-    
+
         foreach ( $string in $strings )
         {
             It "Should return true from '$string'" {
-                $checkContent = (Split-TestStrings -CheckContent ($checkContent -f $string)) 
+                $checkContent = (Split-TestStrings -CheckContent ($checkContent -f $string))
                 Test-SecurityPolicyContainsRange -CheckContent $checkContent| Should Be $true
             }
         }
     }
 
     Context "Not Match" {
-        
+
         $strings = @(
             'If the value for "Password must meet complexity requirements" is not set to "Enabled", this is a finding.',
             'If the value for "Store password using reversible encryption" is not set to "Disabled", this is a finding.',
@@ -497,7 +501,7 @@ Describe 'Test-SecurityPolicyContainsRange' {
         {
             It "Should return false from '$string'" {
                 $checkContent = (Split-TestStrings -CheckContent ($checkContent -f $string))
-                $result = Test-SecurityPolicyContainsRange -CheckContent $checkContent 
+                $result = Test-SecurityPolicyContainsRange -CheckContent $checkContent
                 $result | Should Be $false
             }
         }
@@ -507,9 +511,9 @@ Describe 'Test-SecurityPolicyContainsRange' {
 Describe 'Get-SecurityPolicyOrganizationValueTestString' {
     $checkContent = 'Verify the effective setting in Local Group Policy Editor.
     Run "gpedit.msc".
-    
+
     Navigate to Local Computer Policy &gt;&gt; Computer Configuration &gt;&gt; Windows Settings &gt;&gt; Security Settings &gt;&gt; Account Policies &gt;&gt; Account Lockout Policy.
-    
+
     {0}'
     $strings = @{
         'If the "Reset account lockout counter after" value is less than "15" minutes , this is a finding.'                                                         = "'{0}' -ge '15'";
@@ -518,12 +522,12 @@ Describe 'Get-SecurityPolicyOrganizationValueTestString' {
         'If the "Account lockout duration" is less than "15" minutes (excluding "0"), this is a finding.'                                                           = "'{0}' -ge '15' -or '{0}' -eq '0'";
         'If the value for the "Maximum password age" is greater than "60" days, this is a finding.  If the value is set to "0" (never expires), this is a finding.' = "'{0}' -le '60' -and '{0}' -ne '0'"
     }
-    
+
     foreach ($string in $strings.GetEnumerator())
     {
         It "Should return ($($string.Value)) from '$($string.Key)'" {
             $checkContent = (Split-TestStrings -CheckContent ($checkContent -f $string.Key))
-            $result = Get-SecurityPolicyOrganizationValueTestString -CheckContent $checkContent 
+            $result = Get-SecurityPolicyOrganizationValueTestString -CheckContent $checkContent
             $result | Should Be $string.Value
         }
     }
