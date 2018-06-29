@@ -555,7 +555,7 @@ Enter the following:
 
 "Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | FL *codeintegrity*"
 
-If "CodeIntegrityPolicyEnforcementStatus" does not have a value of "2" indicating "Enforced", this is a finding. 
+If "CodeIntegrityPolicyEnforcementStatus" does not have a value of "2" indicating "Enforced", this is a finding.
 
 If "UserModeCodeIntegrityPolicyEnforcementStatus" does not have a value of "2" indicating "Enforced", this is a finding.
 
@@ -653,7 +653,7 @@ Ensure they are used only for the purpose of managing directory services. Otherw
       <fix id="F-WDAW-00-001300_fix" />
       <check system="C-WDAW-00-001300_chk">
         <check-content-ref name="M" href="VMS_XCCDF_Benchmark_SRG.xml" />
-        <check-content>If domain controllers and directory services are only managed with local logons to domain controllers, not remotely, this requirement is not applicable. 
+        <check-content>If domain controllers and directory services are only managed with local logons to domain controllers, not remotely, this requirement is not applicable.
 
 Discuss with the Information System Security Manager (ISSM) or DAW system administrators and review any available site documentation.
 
@@ -966,7 +966,7 @@ If the membership of the following admin groups is not empty, this is a finding:
 On target systems (high value assets), configure the following registry value:
 - HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Lsa
 - Name: DisableRestrictedAdmin
-- Type: REG_DWORD 
+- Type: REG_DWORD
 - Value: 0
 
 On DAW systems:
@@ -1001,4 +1001,3 @@ If restricted remote administration has not been enabled on the DAW and is not e
     </Rule>
   </Group>
 </Benchmark>
-

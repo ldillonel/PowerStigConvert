@@ -56,7 +56,7 @@ Verify that the system does execute the trigger(s) each time a user session is e
 
 If it does not operate correctly for all types of user, this is a finding.</check-content></check></Rule></Group><Group id="V-67759"><title>SRG-APP-000023-DB-000001</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82249r1_rule" severity="medium" weight="10.0"><version>SQL4-00-030300</version><title>SQL Server authentication and identity management must be integrated with an organization-level authentication/access mechanism providing account management and automation for all users, groups, roles, and any other principals.</title><description>&lt;VulnDiscussion&gt;Enterprise environments make account management for applications and databases challenging and complex. A manual process for account management functions adds the risk of a potential oversight or other error. Managing accounts for the same person in multiple places is inefficient and prone to problems with consistency and synchronization.
 
-A comprehensive application account management process that includes automation helps to ensure that accounts designated as requiring attention are consistently and promptly addressed. 
+A comprehensive application account management process that includes automation helps to ensure that accounts designated as requiring attention are consistently and promptly addressed.
 
 Examples include, but are not limited to, using automation to take action on multiple accounts designated as inactive, suspended, or terminated, or by disabling accounts located in non-centralized account stores, such as multiple servers. Account management functions can also include: assignment of group or role membership; identifying account type; specifying user access authorizations (i.e., privileges); account removal, update, or termination; and administrative alerts. The use of automated mechanisms can include, for example: using email or text messaging to notify account managers when users are terminated or transferred; using the information system to monitor account usage; and using automated telephone notification to report atypical system account usage.
 
@@ -74,8 +74,8 @@ Alternatively, run the statement:
 EXEC xp_instance_regwrite
     N'HKEY_LOCAL_MACHINE',
     N'Software\Microsoft\MSSQLServer\MSSQLServer',
-    N'LoginMode', 
-    REG_DWORD, 
+    N'LoginMode',
+    REG_DWORD,
     1;
 Restart the SQL Server instance.
 
@@ -87,7 +87,7 @@ Right-click on the Login name; click on Delete or Disable.
 
 To drop or disable a Login by using a query:
 USE master;
-DROP LOGIN &lt;login name&gt;; 
+DROP LOGIN &lt;login name&gt;;
 ALTER LOGIN &lt;login name&gt; DISABLE;
 
 Dropping a Login does not delete the equivalent database User(s).  There may be more than one database containing a User mapped to the Login.  Drop the User(s) unless still needed..
@@ -105,10 +105,10 @@ In the Object Explorer in SQL Server Management Studio (SSMS), right-click on th
 If Windows Authentication Mode is selected, this is not a finding.
 
 Alternatively, in a query interface such as the SSMS Transact-SQL editor, run the statement:
-EXECUTE xp_instance_regread 
+EXECUTE xp_instance_regread
     N'HKEY_LOCAL_MACHINE',
-    N'Software\Microsoft\MSSQLServer\MSSQLServer', 
-    N'LoginMode'; 
+    N'Software\Microsoft\MSSQLServer\MSSQLServer',
+    N'LoginMode';
 
 If the returned value in the "Data" column is 1, this is not a finding.
 
@@ -121,21 +121,21 @@ From the documentation, obtain the list of accounts authorized to be managed by 
 Determine the accounts (SQL Logins) actually managed by SQL Server.  Run the statement:
 SELECT
     name
-FROM 
-    sys.sql_logins 
+FROM
+    sys.sql_logins
 WHERE
     type_desc = 'SQL_LOGIN'
     AND is_disabled = 0;
 
-If any accounts listed by the query are not listed in the documentation, this is a finding.</check-content></check></Rule></Group><Group id="V-67761"><title>SRG-APP-000033-DB-000084</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82251r1_rule" severity="medium" weight="10.0"><version>SQL4-00-002010</version><title>SQL Server must enforce approved authorizations for logical access to server-level system resources in accordance with applicable access control policies.</title><description>&lt;VulnDiscussion&gt;Authentication with a DoD-approved PKI certificate does not necessarily imply authorization to access the SQL Server instance and server-level resources.  To mitigate the risk of unauthorized access to sensitive information by entities that have been issued certificates by DoD-approved PKIs, all DoD systems, including SQL Server instances, must be properly configured to implement access control policies. 
+If any accounts listed by the query are not listed in the documentation, this is a finding.</check-content></check></Rule></Group><Group id="V-67761"><title>SRG-APP-000033-DB-000084</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82251r1_rule" severity="medium" weight="10.0"><version>SQL4-00-002010</version><title>SQL Server must enforce approved authorizations for logical access to server-level system resources in accordance with applicable access control policies.</title><description>&lt;VulnDiscussion&gt;Authentication with a DoD-approved PKI certificate does not necessarily imply authorization to access the SQL Server instance and server-level resources.  To mitigate the risk of unauthorized access to sensitive information by entities that have been issued certificates by DoD-approved PKIs, all DoD systems, including SQL Server instances, must be properly configured to implement access control policies.
 
-Successful authentication must not automatically give an entity access to an asset or security boundary. Authorization procedures and controls must be implemented to ensure each authenticated entity also has a validated and current authorization. Authorization is the process of determining whether an entity, once authenticated, is permitted to access a specific asset. Information systems use access control policies and enforcement mechanisms to implement this requirement. 
+Successful authentication must not automatically give an entity access to an asset or security boundary. Authorization procedures and controls must be implemented to ensure each authenticated entity also has a validated and current authorization. Authorization is the process of determining whether an entity, once authenticated, is permitted to access a specific asset. Information systems use access control policies and enforcement mechanisms to implement this requirement.
 
-Access control policies include identity-based policies, role-based policies, and attribute-based policies. Access enforcement mechanisms include access control lists, access control matrices, and cryptography. These policies and mechanisms must be employed by the application to control access between users (or processes acting on behalf of users) and objects (e.g., devices, files, records, processes, programs, and domains) in the information system. 
+Access control policies include identity-based policies, role-based policies, and attribute-based policies. Access enforcement mechanisms include access control lists, access control matrices, and cryptography. These policies and mechanisms must be employed by the application to control access between users (or processes acting on behalf of users) and objects (e.g., devices, files, records, processes, programs, and domains) in the information system.
 
 This requirement is applicable to access control enforcement applications, a category that includes SQL Server.  If SQL Server is not configured to follow applicable policy when approving access, it may be in conflict with networks or other applications in the information system. This may result in users either gaining or being denied access inappropriately and in conflict with applicable policy.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000213</ident><fixtext fixref="F-73875r1_fix">Use GRANT, REVOKE, DENY, ALTER SERVER ROLE … ADD MEMBER …  and/or  ALTER SERVER ROLE  …. DROP MEMBER statements to add and remove permissions on server-level securables, bringing them into line with the documented requirements.</fixtext><fix id="F-73875r1_fix" /><check system="C-68327r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Review the system documentation to determine the required levels of protection for DBMS server securables, by type of login.
 
-Review the permissions actually in place on the server. 
+Review the permissions actually in place on the server.
 
 The server permission functions and views provided in the supplemental file Permissions.sql can help with this.
 
@@ -214,7 +214,7 @@ To see what logins and server roles inherit these permissions from the server ro
     SELECT * FROM STIG.members_of_server_role(&lt;server role name&gt;);
 
 To see all the permissions in effect for a server principal (server role or login):
-    SELECT * FROM STIG.server_effective_permissions(&lt;principal name&gt;); 
+    SELECT * FROM STIG.server_effective_permissions(&lt;principal name&gt;);
 
 If designated personnel are not able to configure auditable events, this is a finding.
 
@@ -269,7 +269,7 @@ To see what logins and server roles inherit these permissions from the server ro
     SELECT * FROM STIG.members_of_server_role(&lt;server role name&gt;);
 
 To see all the permissions in effect for a server principal (server role or login):
-    SELECT * FROM STIG.server_effective_permissions(&lt;principal name&gt;); 
+    SELECT * FROM STIG.server_effective_permissions(&lt;principal name&gt;);
 
 If designated personnel are not able to configure auditable events, this is a finding.
 
@@ -295,11 +295,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -340,11 +340,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -364,7 +364,7 @@ If the audited_result column is not "FAILURE" or "SUCCESS AND FAILURE", this is 
 
 SQL Server is capable of a range of actions on data stored within the database. It is important, for accurate forensic analysis, to know exactly when actions were performed. This requires specific information regarding the date and time an audit record is referring to. If date and time information is not recorded and stored with the audit record, the record itself is of very limited use.
 
-Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000131</ident><fixtext fixref="F-73887r1_fix">Design and deploy a SQL Server Audit or a Trace that captures Start Time and (where relevant) End Time for all auditable events.  
+Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000131</ident><fixtext fixref="F-73887r1_fix">Design and deploy a SQL Server Audit or a Trace that captures Start Time and (where relevant) End Time for all auditable events.
 
 The script provided in the supplemental file Trace.sql can be used to create a trace.
 
@@ -374,7 +374,7 @@ If SQL Server Audit is in use, the event time and date are always captured: this
 
 If SQL Server Trace is in use for audit purposes, verify that for all events it captures the start and (where relevant) end time.
 From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -383,17 +383,17 @@ If no traces are returned, this is a finding.
 Determine the trace(s) being used for the auditing requirement.
 In the following, replace # with a trace ID being used for the auditing requirements.
 From the query prompt:
-WITH 
+WITH
 EC AS (SELECT eventid, columnid FROM sys.fn_trace_geteventinfo(2)),
 E AS (SELECT DISTINCT eventid FROM EC)
 SELECT
     E.eventid,
        CASE WHEN EC14.columnid IS NULL THEN 'Start Time (14) missing' ELSE '14 OK' END AS field14,
        CASE WHEN EC15.columnid IS NULL THEN 'End Time (15) missing' ELSE '15 OK' END AS field15
-FROM E E 
+FROM E E
     LEFT OUTER JOIN EC EC14
         ON  EC14.eventid = E.eventid
-        AND EC14.columnid = 14 
+        AND EC14.columnid = 14
     LEFT OUTER JOIN EC EC15
         ON  EC15.eventid = E.eventid
         AND EC15.columnid = 15
@@ -406,7 +406,7 @@ SQL Server is capable of a range of actions on data stored within the database. 
 
 An event location can be a database instance, table, column, row, etc. Without sufficient information establishing where the audit events occurred, investigation into the cause of events is severely hindered. If SQL Server Audit is enabled, SQL Server does capture the event location-specific information in all audit records.
 
-Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000132</ident><fixtext fixref="F-73889r1_fix">Design and deploy a SQL Server Audit or Trace that captures the server name, database name, object type, object name and object owner (each where relevant) for all auditable events.  
+Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000132</ident><fixtext fixref="F-73889r1_fix">Design and deploy a SQL Server Audit or Trace that captures the server name, database name, object type, object name and object owner (each where relevant) for all auditable events.
 
 The script provided in the supplemental file Trace.sql can be used to create a trace.
 
@@ -416,7 +416,7 @@ If SQL Server Audit is in use, the server instance, database, schema, and object
 
 If SQL Server Trace is in use for audit purposes, verify that for all events it captures the server name, database name, object type, object name and object owner (each where relevant).
 From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -425,7 +425,7 @@ If no traces are returned, this is a finding.
 Determine the trace(s) being used for the auditing requirement.
 In the following, replace # with a trace ID being used for the auditing requirements.
 From the query prompt:
-WITH 
+WITH
 EC AS (SELECT eventid, columnid FROM sys.fn_trace_geteventinfo(2)),
 E AS (SELECT DISTINCT eventid FROM EC)
 SELECT
@@ -435,10 +435,10 @@ SELECT
     CASE WHEN EC28.columnid IS NULL THEN 'Object Type (28) missing' ELSE '28 OK' END AS field28,
     CASE WHEN EC34.columnid IS NULL THEN 'Object Name (34) missing' ELSE '34 OK' END AS field34,
     CASE WHEN EC37.columnid IS NULL THEN 'Object Owner (37) missing' ELSE '34 OK' END AS field37
-FROM E E 
+FROM E E
     LEFT OUTER JOIN EC EC26
         ON  EC26.eventid = E.eventid
-        AND EC26.columnid = 26 
+        AND EC26.columnid = 26
     LEFT OUTER JOIN EC EC35
         ON  EC35.eventid = E.eventid
         AND EC35.columnid = 35
@@ -460,7 +460,7 @@ SQL Server is capable of a range of actions on data stored within the database. 
 
 The source of the event can be a user account and sometimes a system account when timed jobs are run. Without information establishing the source of activity, the value of audit records from a forensics perspective is questionable. If Trace is enabled for auditing, SQL Server does capture the source of the event-specific information in all audit records.
 
-Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000133</ident><fixtext fixref="F-73891r1_fix">Design and deploy a SQL Server Audit or Trace that captures the NT User Name, NT Domain Name, Host Name, Client Process ID, Application Name, Login Name, SPID, DB User Name, and Login SID (each where relevant) for all auditable events.  
+Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000133</ident><fixtext fixref="F-73891r1_fix">Design and deploy a SQL Server Audit or Trace that captures the NT User Name, NT Domain Name, Host Name, Client Process ID, Application Name, Login Name, SPID, DB User Name, and Login SID (each where relevant) for all auditable events.
 
 The script provided in the supplemental file Trace.sql can be used to create a trace.
 
@@ -470,16 +470,16 @@ If SQL Server Audit is in use, this is not a finding.
 
 If SQL Server Trace is in use for audit purposes, verify that for all events it captures the NT User Name, NT Domain Name, Host Name, Client Process ID, Application Name, Login Name, SPID, DB User Name, and Login SID (each where relevant).
 From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
-All currently defined traces for the SQL server instance will be listed. 
+All currently defined traces for the SQL server instance will be listed.
 
 If no traces are returned, this is a finding.
 
 Determine the trace(s) being used for the auditing requirement.
 In the following, replace # with a trace ID being used for the auditing requirements.
 From the query prompt:
-WITH 
+WITH
 EC AS (SELECT eventid, columnid FROM sys.fn_trace_geteventinfo(2)),
 E AS (SELECT DISTINCT eventid FROM EC)
 SELECT
@@ -493,10 +493,10 @@ SELECT
     CASE WHEN EC12.columnid IS NULL THEN 'SPID (12) missing' ELSE '12 OK' END AS field12,
     CASE WHEN EC40.columnid IS NULL THEN 'DB User Name (40) missing' ELSE '40 OK' END AS field40,
     CASE WHEN EC41.columnid IS NULL THEN 'Login SID (41) missing' ELSE '41 OK' END AS field41
-FROM E E 
+FROM E E
     LEFT OUTER JOIN EC EC6
         ON  EC6.eventid = E.eventid
-        AND EC6.columnid = 6 
+        AND EC6.columnid = 6
     LEFT OUTER JOIN EC EC7
         ON  EC7.eventid = E.eventid
         AND EC7.columnid = 7
@@ -546,7 +546,7 @@ If SQL Server Audit is in use, the Succeeded column is populated for all relevan
 
 If SQL Server Trace is in use for audit purposes, verify that for all events it captures the Success flag (successful use of permissions), State and Error number (each where relevant).
 From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -555,7 +555,7 @@ If no traces are returned, this is a finding.
 Determine the trace(s) being used for the auditing requirement.
 In the following, replace # with a trace ID being used for the auditing requirements.
 From the query prompt:
-WITH 
+WITH
 EC AS (SELECT eventid, columnid FROM sys.fn_trace_geteventinfo(2)),
 E AS (SELECT DISTINCT eventid FROM EC)
 SELECT
@@ -563,7 +563,7 @@ SELECT
     CASE WHEN EC23.columnid IS NULL THEN 'Success (successful use of permissions) (23) missing' ELSE '23 OK' END AS field23,
     CASE WHEN EC30.columnid IS NULL THEN 'State (30) missing' ELSE '30 OK' END AS field30,
     CASE WHEN EC31.columnid IS NULL THEN 'Error (31) missing' ELSE '31 OK' END AS field31
-FROM E E 
+FROM E E
     LEFT OUTER JOIN EC EC23
         ON  EC23.eventid = E.eventid
         AND EC23.columnid = 23
@@ -588,7 +588,7 @@ If SQL Server Audit is in use, the Principal Name columns are populated for all 
 
 If SQL Server Trace is in use for audit purposes, verify that for all events it captures the NT User Name, NT Domain Name, Host Name, Login Name, DB User Name and Login SID (each where relevant).
 From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -597,7 +597,7 @@ If no traces are returned, this is a finding.
 Determine the trace(s) being used for the auditing requirement.
 In the following, replace # with a trace ID being used for the auditing requirements.
 From the query prompt:
-WITH 
+WITH
 EC AS (SELECT eventid, columnid FROM sys.fn_trace_geteventinfo(2)),
 E AS (SELECT DISTINCT eventid FROM EC)
 SELECT
@@ -608,10 +608,10 @@ SELECT
     CASE WHEN EC11.columnid IS NULL THEN 'Login Name (11) missing' ELSE '11 OK' END AS field11,
     CASE WHEN EC40.columnid IS NULL THEN 'DB User Name (40) missing' ELSE '40 OK' END AS field40,
     CASE WHEN EC41.columnid IS NULL THEN 'Login SID (41) missing' ELSE '41 OK' END AS field41
-FROM E E 
+FROM E E
     LEFT OUTER JOIN EC EC6
         ON  EC6.eventid = E.eventid
-        AND EC6.columnid = 6 
+        AND EC6.columnid = 6
     LEFT OUTER JOIN EC EC7
         ON  EC7.eventid = E.eventid
         AND EC7.columnid = 7
@@ -653,7 +653,7 @@ If any such are identified, this is a finding.
 
 If SQL Server Audit is in use, compare the audit specification(s) with the documented requirements.
 
-If any such requirement is not satisfied by the audit specification(s) (or by supplemental, locally-deployed mechanisms), this is a finding.</check-content></check></Rule></Group><Group id="V-67785"><title>SRG-APP-000109-DB-000049</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82275r1_rule" severity="medium" weight="10.0"><version>SQL4-00-013000</version><title>Unless it has been determined that availability is paramount, SQL Server must shut down upon the failure of an Audit, or a Trace used for auditing purposes, to include the unavailability of space for more audit/trace log records.</title><description>&lt;VulnDiscussion&gt;It is critical that when SQL Server is at risk of failing to process audit logs as required, it take action to mitigate the failure. Audit processing failures include: software/hardware errors; failures in the audit capturing mechanisms; and audit storage capacity being reached or exceeded. Responses to audit failure depend upon the nature of the failure mode. 
+If any such requirement is not satisfied by the audit specification(s) (or by supplemental, locally-deployed mechanisms), this is a finding.</check-content></check></Rule></Group><Group id="V-67785"><title>SRG-APP-000109-DB-000049</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82275r1_rule" severity="medium" weight="10.0"><version>SQL4-00-013000</version><title>Unless it has been determined that availability is paramount, SQL Server must shut down upon the failure of an Audit, or a Trace used for auditing purposes, to include the unavailability of space for more audit/trace log records.</title><description>&lt;VulnDiscussion&gt;It is critical that when SQL Server is at risk of failing to process audit logs as required, it take action to mitigate the failure. Audit processing failures include: software/hardware errors; failures in the audit capturing mechanisms; and audit storage capacity being reached or exceeded. Responses to audit failure depend upon the nature of the failure mode.
 
 When the need for system availability does not outweigh the need for a complete audit trail, SQL Server should shut down immediately, rolling back all in-flight transactions.
 
@@ -683,9 +683,9 @@ If SQL Server Audit is in use, review the defined server audits by running the s
 SELECT * FROM sys.server_audits;
 By observing the [name] and [is_state_enabled] columns, identify the row or rows in use.
 
-If the [on_failure_desc] is "SHUTDOWN SERVER INSTANCE" on this/these row(s), this is not a finding.  Otherwise, this is a finding.</check-content></check></Rule></Group><Group id="V-67787"><title>SRG-APP-000109-DB-000321</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82277r2_rule" severity="high" weight="10.0"><version>SQL4-00-030600</version><title>Where availability is paramount, the SQL Server must continue processing (preferably overwriting existing records, oldest first), in the event of lack of space for more Audit/Trace log records; and must keep processing after any failure of an Audit/Trace.</title><description>&lt;VulnDiscussion&gt;It is critical that when SQL Server is at risk of failing to process audit logs as required, it take action to mitigate the failure. Audit processing failures include: software/hardware errors; failures in the audit capturing mechanisms; and audit storage capacity being reached or exceeded. Responses to audit failure depend upon the nature of the failure mode. 
+If the [on_failure_desc] is "SHUTDOWN SERVER INSTANCE" on this/these row(s), this is not a finding.  Otherwise, this is a finding.</check-content></check></Rule></Group><Group id="V-67787"><title>SRG-APP-000109-DB-000321</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82277r2_rule" severity="high" weight="10.0"><version>SQL4-00-030600</version><title>Where availability is paramount, the SQL Server must continue processing (preferably overwriting existing records, oldest first), in the event of lack of space for more Audit/Trace log records; and must keep processing after any failure of an Audit/Trace.</title><description>&lt;VulnDiscussion&gt;It is critical that when SQL Server is at risk of failing to process audit logs as required, it take action to mitigate the failure. Audit processing failures include: software/hardware errors; failures in the audit capturing mechanisms; and audit storage capacity being reached or exceeded. Responses to audit failure depend upon the nature of the failure mode.
 
-When availability is an overriding concern, approved actions in response to an audit failure are as follows: 
+When availability is an overriding concern, approved actions in response to an audit failure are as follows:
 
 (i) If the failure was caused by the lack of audit record storage capacity, the DBMS must continue generating audit records, if possible (automatically restarting the audit service if necessary), preferably overwriting the oldest audit records in a first-in-first-out manner.
 
@@ -779,7 +779,7 @@ Auditors group (Read)
 SQL Server Service SID OR Service Account (Full Control) [Notes 1, 2]
 SQL Server SQL Agent Service SID OR Service Account, if SQL Server Agent is in use. (Read, Execute, Write) [Notes 1, 2]
 
-If any less restrictive permissions are present and not specifically justified and approved in the system security plan, this is a finding. 
+If any less restrictive permissions are present and not specifically justified and approved in the system security plan, this is a finding.
 
 If less restrictive permissions are present and specifically justified and approved in the system security plan, this is not a finding.
 
@@ -864,7 +864,7 @@ Auditors group (Read)
 SQL Server Service SID OR Service Account (Full Control) [Notes 1, 2]
 SQL Server SQL Agent Service SID OR Service Account, if SQL Server Agent is in use. (Read, Execute, Write) [Notes 1, 2]
 
-If any less restrictive permissions are present and not specifically justified and approved in the system security plan, this is a finding. 
+If any less restrictive permissions are present and not specifically justified and approved in the system security plan, this is a finding.
 
 If less restrictive permissions are present and specifically justified and approved in the system security plan, this is not a finding.
 
@@ -951,7 +951,7 @@ Auditors group (Read)
 SQL Server Service SID OR Service Account (Full Control) [Notes 1, 2]
 SQL Server SQL Agent Service SID OR Service Account, if SQL Server Agent is in use. (Read, Execute, Write) [Notes 1, 2]
 
-If any less restrictive permissions are present and not specifically justified and approved in the system security plan, this is a finding. 
+If any less restrictive permissions are present and not specifically justified and approved in the system security plan, this is a finding.
 
 If less restrictive permissions are present and specifically justified and approved in the system security plan, this is not a finding.
 
@@ -974,9 +974,9 @@ Note 2: Tips for adding a service SID/virtual account to a folder's permission l
 7.b.i) Type "NT SERVICE\SQL" and click "Check Names"
 7.b.ii) Select the "SQLAgent$&lt;instance name&gt;" user and click OK
 8) Click OK
-9) Permission like a normal user from here</check-content></check></Rule></Group><Group id="V-67795"><title>SRG-APP-000121-DB-000202</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82285r1_rule" severity="medium" weight="10.0"><version>SQL4-00-013900</version><title>SQL Server must protect its audit features from unauthorized access, modification, or removal.</title><description>&lt;VulnDiscussion&gt;Protecting audit data also includes identifying and protecting the tools used to view and manipulate log data. 
+9) Permission like a normal user from here</check-content></check></Rule></Group><Group id="V-67795"><title>SRG-APP-000121-DB-000202</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82285r1_rule" severity="medium" weight="10.0"><version>SQL4-00-013900</version><title>SQL Server must protect its audit features from unauthorized access, modification, or removal.</title><description>&lt;VulnDiscussion&gt;Protecting audit data also includes identifying and protecting the tools used to view and manipulate log data.
 
-Depending upon the log format and application, system and application log tools may provide the only means to manipulate and manage application and system log data. It is, therefore, imperative that access to audit tools be controlled and protected from unauthorized access. 
+Depending upon the log format and application, system and application log tools may provide the only means to manipulate and manage application and system log data. It is, therefore, imperative that access to audit tools be controlled and protected from unauthorized access.
 
 If an attacker were to gain access to audit tools, he could analyze audit logs for system weaknesses or weaknesses in the auditing itself. An attacker could also manipulate logs to hide evidence of malicious activity.
 
@@ -986,13 +986,13 @@ If unauthorized accounts have these privileges, this is a finding.</check-conten
 
 If an attacker were to gain access to audit tools, he could analyze audit logs for system weaknesses or weaknesses in the auditing itself. An attacker could also manipulate logs to hide evidence of malicious activity.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001493</ident><fixtext fixref="F-73913r1_fix">Apply or modify permissions on PROFILER.EXE to make it accessible by authorized personnel only.</fixtext><fix id="F-73913r1_fix" /><check system="C-68365r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>In Windows Explorer, navigate to &lt;drive&gt;:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn.  Right-click on the file PROFILER.EXE; select Properties.  Click on the Security tab.  Review the users and groups listed, and the permissions granted to each.
 
-If PROFILER.EXE can be executed or modified by any unauthorized users, this is a finding.</check-content></check></Rule></Group><Group id="V-67799"><title>SRG-APP-000121-DB-000202</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82289r1_rule" severity="medium" weight="10.0"><version>SQL4-00-013920</version><title>Audit tools used in conjunction with SQL Server  must be protected  from unauthorized access.</title><description>&lt;VulnDiscussion&gt;Protecting audit data also includes identifying and protecting the tools used to view and manipulate log data. 
+If PROFILER.EXE can be executed or modified by any unauthorized users, this is a finding.</check-content></check></Rule></Group><Group id="V-67799"><title>SRG-APP-000121-DB-000202</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82289r1_rule" severity="medium" weight="10.0"><version>SQL4-00-013920</version><title>Audit tools used in conjunction with SQL Server  must be protected  from unauthorized access.</title><description>&lt;VulnDiscussion&gt;Protecting audit data also includes identifying and protecting the tools used to view and manipulate log data.
 
-Depending upon the log format and application, system and application log tools may provide the only means to manipulate and manage application and system log data. It is, therefore, imperative that access to audit tools be controlled and protected from unauthorized access. 
+Depending upon the log format and application, system and application log tools may provide the only means to manipulate and manage application and system log data. It is, therefore, imperative that access to audit tools be controlled and protected from unauthorized access.
 
 Applications providing tools to interface with audit data will leverage user permissions and roles identifying the user accessing the tools and the corresponding rights the user enjoys in order make access decisions regarding the access to audit tools.
 
-Audit tools include, but are not limited to, OS-provided audit tools, vendor-provided audit tools, and open source audit tools needed to successfully view and manipulate audit information system activity and records. 
+Audit tools include, but are not limited to, OS-provided audit tools, vendor-provided audit tools, and open source audit tools needed to successfully view and manipulate audit information system activity and records.
 
 If an attacker were to gain access to audit tools, he could analyze audit logs for system weaknesses or weaknesses in the auditing itself. An attacker could also manipulate logs to hide evidence of malicious activity.
 
@@ -1044,7 +1044,7 @@ SYSTEM (Full Control)
 Administrators (Full Control) [See Note 1]
 Users (Read, List Folder Contents, Read &amp; Execute)
 Creator Owner (Special Permissions - Full control - Subfolders and files only)
-All Application Packages (Read &amp; Execute) [Only as needed - see Note 2] 
+All Application Packages (Read &amp; Execute) [Only as needed - see Note 2]
 
 If any less restrictive permissions are present (and not specifically justified and approved), this is a finding.
 
@@ -1363,7 +1363,7 @@ GO
 Restart the server.</fixtext><fix id="F-73959r1_fix" /><check system="C-68411r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>If the Data Quality Services feature is used and satisfies organizational requirements, this is not a finding.
 
 Run the query:
-SELECT * FROM sys.databases WHERE name in ('DQS_MAIN', 'DQS_PROJECTS', 'DQS_STAGING_DATA'); 
+SELECT * FROM sys.databases WHERE name in ('DQS_MAIN', 'DQS_PROJECTS', 'DQS_STAGING_DATA');
 
 If any rows are returned, this is a finding.
 
@@ -1588,7 +1588,7 @@ GO
 If mixed-mode authentication is necessary, then for SQLCMD, which cannot be configured not to accept a plain-text password when mixed-mode authentication is enabled, and any other essential tool with the same limitation:
 1) Document the need for it, who uses it, and any relevant mitigations, and obtain AO approval.
 2) Train all users of the tool in the importance of not using the plain-text password option and in how to keep the password hidden.</fixtext><fix id="F-73985r1_fix" /><check system="C-68437r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Run this query to determine whether SQL Server authentication is enabled:
-EXEC master.sys.xp_loginconfig 'login mode'; 
+EXEC master.sys.xp_loginconfig 'login mode';
 
 If the config_value returned is "Windows NT Authentication", this is not a finding.
 
@@ -1596,7 +1596,7 @@ For SQLCMD, which cannot be configured not to accept a plain-text password, and 
 
 Request evidence that all users of the tool are trained in the importance of not using the plain-text password option and in how to keep the password hidden; and that they adhere to this practice; if not, this is a finding.</check-content></check></Rule></Group><Group id="V-67871"><title>SRG-APP-000179-DB-000114</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82361r1_rule" severity="high" weight="10.0"><version>SQL4-00-031100</version><title>SQL Server must use NIST FIPS 140-2 validated cryptographic modules for cryptographic operations.</title><description>&lt;VulnDiscussion&gt;Use of weak or not validated cryptographic algorithms undermines the purposes of utilizing encryption and digital signatures to protect data.  Weak algorithms can be easily broken and not validated cryptographic modules may not implement algorithms correctly. Unapproved cryptographic modules or algorithms should not be relied on for authentication, confidentiality or integrity. Weak cryptography could allow an attacker to gain access to and modify data stored in the database as well as the administration settings of SQL Server.
 
-Applications, including DBMSs, utilizing cryptography are required to use approved NIST FIPS 140-2 validated cryptographic modules that meet the requirements of applicable federal laws, Executive Orders, directives, policies, regulations, standards, and guidance.  
+Applications, including DBMSs, utilizing cryptography are required to use approved NIST FIPS 140-2 validated cryptographic modules that meet the requirements of applicable federal laws, Executive Orders, directives, policies, regulations, standards, and guidance.
 
 Operations that require the use of cryptography include the provisioning of digital signatures, the generation and validation of cryptographic hashes, and the protection of data by storing and transmitting it in encrypted form.
 
@@ -1606,7 +1606,7 @@ SQL Server complies with FIPS 140-2 if Windows is configured to do so.
 
 NSA Type-X (where X=1, 2, 3, 4) products are NSA-certified, hardware-based encryption modules.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000803</ident><ident system="http://iase.disa.mil/cci">CCI-002450</ident><fixtext fixref="F-73987r1_fix">In Windows, open Administrative Tools &gt;&gt; Local Security Policy.  Expand  Local Policies &gt;&gt; Security Options.  In the right-side pane, double-click on "System cryptography: Use FIPS compliant algorithms for encryption, hashing, and signing".
 
-In the dialog box that appears, if the radio buttons are active, click Enabled, and then click Apply.  If the radio buttons are grayed out, use Group Policy Management (on the appropriate server for this domain) to enforce the Enabled policy, and deploy it to the server(s) running SQL Server.</fixtext><fix id="F-73987r1_fix" /><check system="C-68439r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>In Windows, open Administrative Tools &gt;&gt; Local Security Policy.  Expand  Local Policies &gt;&gt; Security Options.  In the right-side pane, find "System cryptography: Use FIPS compliant algorithms for encryption, hashing, and signing". 
+In the dialog box that appears, if the radio buttons are active, click Enabled, and then click Apply.  If the radio buttons are grayed out, use Group Policy Management (on the appropriate server for this domain) to enforce the Enabled policy, and deploy it to the server(s) running SQL Server.</fixtext><fix id="F-73987r1_fix" /><check system="C-68439r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>In Windows, open Administrative Tools &gt;&gt; Local Security Policy.  Expand  Local Policies &gt;&gt; Security Options.  In the right-side pane, find "System cryptography: Use FIPS compliant algorithms for encryption, hashing, and signing".
 
 If, in the Security Setting column, the value is "Disabled," this is a finding.</check-content></check></Rule></Group><Group id="V-67873"><title>SRG-APP-000180-DB-000115</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82363r1_rule" severity="medium" weight="10.0"><version>SQL4-00-018900</version><title>SQL Server must uniquely identify and authenticate non-organizational users (or processes acting on behalf of non-organizational users).</title><description>&lt;VulnDiscussion&gt;Non-organizational users include all information system users other than organizational users, which include organizational employees or individuals the organization deems to have equivalent status of employees (e.g., contractors, guest researchers, individuals from allied nations).
 
@@ -1620,17 +1620,17 @@ Scalability, practicality, and security are simultaneously considered in balanci
 
 If the documentation indicates that this is a public-facing, read-only (from the point of view of public users) database that does not require individual authentication, this is not a finding.
 
-If non-organizational users are not uniquely identified and authenticated, this is a finding.</check-content></check></Rule></Group><Group id="V-67875"><title>SRG-APP-000211-DB-000122</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82365r1_rule" severity="medium" weight="10.0"><version>SQL4-00-020500</version><title>SQL Server must be configured to separate user functionality (including user interface services) from database management functionality.</title><description>&lt;VulnDiscussion&gt;Information system management functionality includes functions necessary to administer databases, network components, workstations, or servers and typically requires privileged user access. 
+If non-organizational users are not uniquely identified and authenticated, this is a finding.</check-content></check></Rule></Group><Group id="V-67875"><title>SRG-APP-000211-DB-000122</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82365r1_rule" severity="medium" weight="10.0"><version>SQL4-00-020500</version><title>SQL Server must be configured to separate user functionality (including user interface services) from database management functionality.</title><description>&lt;VulnDiscussion&gt;Information system management functionality includes functions necessary to administer databases, network components, workstations, or servers and typically requires privileged user access.
 
-The separation of user functionality from information system management functionality is either physical or logical and is accomplished by using different computers, different central processing units, different instances of the operating system, different network addresses, combinations of these methods, or other methods, as appropriate. 
+The separation of user functionality from information system management functionality is either physical or logical and is accomplished by using different computers, different central processing units, different instances of the operating system, different network addresses, combinations of these methods, or other methods, as appropriate.
 
-An example of this type of separation is observed in web administrative interfaces that use separate authentication methods for users of any other information system resources. 
+An example of this type of separation is observed in web administrative interfaces that use separate authentication methods for users of any other information system resources.
 
 This may include isolating the administrative interface on a different domain and with additional access controls.
 
 If administrative functionality or information regarding DBMS management is presented on an interface available for users, information on DBMS settings may be inadvertently made available to the user.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001082</ident><fixtext fixref="F-73991r1_fix">Establish one or more locally-defined server roles and one or more locally-defined database roles for organizing administrative permissions.  Grant administrative permissions to these roles.  Assign the appropriate administrative users to these roles.  Do not grant the roles and permissions to general users.</fixtext><fix id="F-73991r1_fix" /><check system="C-68443r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Check SQL Server permission settings to verify that administrative functionality is kept separate from user functionality.  The views and functions provided in the supplemental file Permissions.sql can help with this review.
 
-If administrator and general user functionality are not separated either physically or logically, this is a finding.</check-content></check></Rule></Group><Group id="V-67879"><title>SRG-APP-000233-DB-000124</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82369r1_rule" severity="medium" weight="10.0"><version>SQL4-00-021500</version><title>SQL Server must isolate security functions from nonsecurity functions.</title><description>&lt;VulnDiscussion&gt;An isolation boundary provides access control and protects the integrity of the hardware, software, and firmware that perform security functions. 
+If administrator and general user functionality are not separated either physically or logically, this is a finding.</check-content></check></Rule></Group><Group id="V-67879"><title>SRG-APP-000233-DB-000124</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82369r1_rule" severity="medium" weight="10.0"><version>SQL4-00-021500</version><title>SQL Server must isolate security functions from nonsecurity functions.</title><description>&lt;VulnDiscussion&gt;An isolation boundary provides access control and protects the integrity of the hardware, software, and firmware that perform security functions.
 
 Security functions are defined as "the hardware, software, and/or firmware of the information system responsible for enforcing the system security policy and supporting the isolation of code and data on which the protection is based".
 
@@ -1644,11 +1644,11 @@ In all cases, use GRANT, REVOKE, DENY, ALTER ROLE … ADD MEMBER …  and/or  AL
 
 Review permissions, both direct and indirect, on the security objects, both built-in and application-specific.  The functions and views provided in the supplemental file Permissions.sql can help with this.
 
-If the database(s), schema(s) and permissions on security objects are not organized to provide effective isolation of security functions from nonsecurity functions, this is a finding.</check-content></check></Rule></Group><Group id="V-67881"><title>SRG-APP-000243-DB-000374</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82371r1_rule" severity="medium" weight="10.0"><version>SQL4-00-031400</version><title>Access to database files must be limited to relevant processes and to authorized, administrative users.</title><description>&lt;VulnDiscussion&gt;Applications, including DBMSs, must prevent unauthorized and unintended information transfer via shared system resources. Permitting only DBMS processes and authorized, administrative users to have access to the files where the database resides helps ensure that those files are not shared inappropriately and are not open to backdoor access and manipulation.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001090</ident><fixtext fixref="F-73997r1_fix">Configure the permissions granted by the operating system/file system on the database files, database transaction log files, database audit log files, and database backup files so that only relevant system accounts and authorized system administrators and database administrators with a need to know are permitted to read/view these files.</fixtext><fix id="F-73997r1_fix" /><check system="C-68449r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Review the permissions granted to users by the operating system/file system on the database files, database transaction log files, database audit log files, and database backup files. 
+If the database(s), schema(s) and permissions on security objects are not organized to provide effective isolation of security functions from nonsecurity functions, this is a finding.</check-content></check></Rule></Group><Group id="V-67881"><title>SRG-APP-000243-DB-000374</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82371r1_rule" severity="medium" weight="10.0"><version>SQL4-00-031400</version><title>Access to database files must be limited to relevant processes and to authorized, administrative users.</title><description>&lt;VulnDiscussion&gt;Applications, including DBMSs, must prevent unauthorized and unintended information transfer via shared system resources. Permitting only DBMS processes and authorized, administrative users to have access to the files where the database resides helps ensure that those files are not shared inappropriately and are not open to backdoor access and manipulation.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001090</ident><fixtext fixref="F-73997r1_fix">Configure the permissions granted by the operating system/file system on the database files, database transaction log files, database audit log files, and database backup files so that only relevant system accounts and authorized system administrators and database administrators with a need to know are permitted to read/view these files.</fixtext><fix id="F-73997r1_fix" /><check system="C-68449r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Review the permissions granted to users by the operating system/file system on the database files, database transaction log files, database audit log files, and database backup files.
 
-If any user/role who is not an authorized system administrator with a need to know or database administrator with a need to know, or a system account for running DBMS processes, is permitted to read/view any of these files, this is a finding.</check-content></check></Rule></Group><Group id="V-67883"><title>SRG-APP-000295-DB-000305</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82373r1_rule" severity="medium" weight="10.0"><version>SQL4-00-031700</version><title>SQL Server must automatically terminate a user session after organization-defined conditions or trigger events requiring session disconnect.</title><description>&lt;VulnDiscussion&gt;This addresses the termination of user-initiated logical sessions in contrast to the termination of network connections that are associated with communications sessions (i.e., network disconnect). A logical session (for local, network, and remote access) is initiated whenever a user (or process acting on behalf of a user) accesses an organizational information system. Such user sessions can be terminated (and thus terminate user access) without terminating network sessions. 
+If any user/role who is not an authorized system administrator with a need to know or database administrator with a need to know, or a system account for running DBMS processes, is permitted to read/view any of these files, this is a finding.</check-content></check></Rule></Group><Group id="V-67883"><title>SRG-APP-000295-DB-000305</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82373r1_rule" severity="medium" weight="10.0"><version>SQL4-00-031700</version><title>SQL Server must automatically terminate a user session after organization-defined conditions or trigger events requiring session disconnect.</title><description>&lt;VulnDiscussion&gt;This addresses the termination of user-initiated logical sessions in contrast to the termination of network connections that are associated with communications sessions (i.e., network disconnect). A logical session (for local, network, and remote access) is initiated whenever a user (or process acting on behalf of a user) accesses an organizational information system. Such user sessions can be terminated (and thus terminate user access) without terminating network sessions.
 
-Session termination ends all processes associated with a user's logical session except those batch processes/jobs that are specifically created by the user (i.e., session owner) to continue after the session is terminated. 
+Session termination ends all processes associated with a user's logical session except those batch processes/jobs that are specifically created by the user (i.e., session owner) to continue after the session is terminated.
 
 Conditions or trigger events requiring automatic session termination can include, for example, organization-defined periods of user inactivity, targeted responses to certain types of incidents, and time-of-day restrictions on information system use.
 
@@ -1656,13 +1656,13 @@ This capability is typically reserved for specific cases where the system owner,
 
 If the documentation explicitly states that such termination is not required or is prohibited, this is not a finding.
 
-If the documentation requires automatic session termination, but SQL Server and Windows (or third-party tools) are not configured accordingly, this is a finding.</check-content></check></Rule></Group><Group id="V-67885"><title>SRG-APP-000340-DB-000304</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82375r1_rule" severity="medium" weight="10.0"><version>SQL4-00-032500</version><title>SQL Server must prevent non-privileged users from executing privileged functionality, to include disabling, circumventing, or altering implemented security safeguards/countermeasures.</title><description>&lt;VulnDiscussion&gt;Preventing non-privileged users from executing privileged functions mitigates the risk that unauthorized individuals or processes may gain unnecessary access to information or privileges. 
+If the documentation requires automatic session termination, but SQL Server and Windows (or third-party tools) are not configured accordingly, this is a finding.</check-content></check></Rule></Group><Group id="V-67885"><title>SRG-APP-000340-DB-000304</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82375r1_rule" severity="medium" weight="10.0"><version>SQL4-00-032500</version><title>SQL Server must prevent non-privileged users from executing privileged functionality, to include disabling, circumventing, or altering implemented security safeguards/countermeasures.</title><description>&lt;VulnDiscussion&gt;Preventing non-privileged users from executing privileged functions mitigates the risk that unauthorized individuals or processes may gain unnecessary access to information or privileges.
 
 System documentation should include a definition of the functionality considered privileged.
 
 Depending on circumstances, privileged functions can include, for example, establishing accounts, performing system integrity checks, or administering cryptographic key management activities. Non-privileged users are individuals that do not possess appropriate authorizations. Circumventing intrusion detection and prevention mechanisms or malicious code protection mechanisms are examples of privileged functions that require protection from non-privileged users.
 
-A privileged function in the DBMS/database context is any operation that modifies the structure of the database, its built-in logic, or its security settings. This would include all Data Definition Language (DDL) statements and all security-related statements. In SQL Server, it encompasses, but is not necessarily limited to: 
+A privileged function in the DBMS/database context is any operation that modifies the structure of the database, its built-in logic, or its security settings. This would include all Data Definition Language (DDL) statements and all security-related statements. In SQL Server, it encompasses, but is not necessarily limited to:
 CREATE
 ALTER
 DROP
@@ -1693,7 +1693,7 @@ The database permission functions and views provided in the supplemental file Pe
 
 Privilege elevation must be utilized only where necessary and protected from misuse.
 
-This calls for inspection of application source code, which will require collaboration with the application developers. It is recognized that in many cases, the database administrator (DBA) is organizationally separate from the application developers and may have limited, if any, access to source code. Nevertheless, protections of this type are so important to the secure operation of databases that they must not be ignored. At a minimum, the DBA must attempt to obtain assurances from the development organization that this issue has been addressed and must document what has been discovered.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-002233</ident><fixtext fixref="F-74003r1_fix">Determine where, when, how, and by what principals/subjects elevated privilege is needed. 
+This calls for inspection of application source code, which will require collaboration with the application developers. It is recognized that in many cases, the database administrator (DBA) is organizationally separate from the application developers and may have limited, if any, access to source code. Nevertheless, protections of this type are so important to the secure operation of databases that they must not be ignored. At a minimum, the DBA must attempt to obtain assurances from the development organization that this issue has been addressed and must document what has been discovered.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-002233</ident><fixtext fixref="F-74003r1_fix">Determine where, when, how, and by what principals/subjects elevated privilege is needed.
 
 Modify documentation as necessary to align it with the actual need for privilege elevation.
 
@@ -1705,7 +1705,7 @@ If elevation of DBMS privileges is documented, but not implemented as described 
 
 If the privilege-elevation logic can be invoked in ways other than intended, or in contexts other than intended, or by subjects/principals other than intended, this is a finding.</check-content></check></Rule></Group><Group id="V-67889"><title>SRG-APP-000356-DB-000314</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82379r1_rule" severity="medium" weight="10.0"><version>SQL4-00-032800</version><title>SQL Server must utilize centralized management of the content captured in audit records generated by all components of the DBMS.</title><description>&lt;VulnDiscussion&gt;Without the ability to centrally manage the content captured in the audit records, identification, troubleshooting, and correlation of suspicious behavior would be difficult and could lead to a delayed or incomplete analysis of an ongoing attack.
 
-The content captured in audit records must be managed from a central location (necessitating automation). Centralized management of audit records and logs provides for efficiency in maintenance and management of records, as well as the backup and archiving of those records. 
+The content captured in audit records must be managed from a central location (necessitating automation). Centralized management of audit records and logs provides for efficiency in maintenance and management of records, as well as the backup and archiving of those records.
 
 SQL Server may write audit records to files in the file system, to other kinds of local repository, or directly to a centralized log management system. (If the Trace facility is used for auditing - this is no longer recommended, but may be in place for legacy reasons - a trace table is another possible destination.)  Whatever the method used, it must be compatible with off-loading the records to the centralized system.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001844</ident><fixtext fixref="F-74005r1_fix">Configure and/or deploy software tools to ensure that SQL Server audit records (to include traces used for audit purposes) are written directly to or systematically transferred to a centralized log management system.</fixtext><fix id="F-74005r1_fix" /><check system="C-68457r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Review the system documentation for a description of how audit records are off-loaded and how local audit log space is managed.
 
@@ -1719,13 +1719,13 @@ If there have been, this is a finding.</check-content></check></Rule></Group><Gr
 
 As noted elsewhere in this document, SQL Server's Audit and/or Trace features can be used for auditing purposes.  This requirement applies to both.
 
-If support personnel are not notified immediately upon storage volume utilization reaching 75%, they are unable to plan for storage capacity expansion. 
+If support personnel are not notified immediately upon storage volume utilization reaching 75%, they are unable to plan for storage capacity expansion.
 
-The monitoring and alerting may be done at the database level, the operating system level, or by specialized monitoring tools. 
+The monitoring and alerting may be done at the database level, the operating system level, or by specialized monitoring tools.
 
 The appropriate support staff include, at a minimum, the ISSO and the DBA/SA.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001855</ident><fixtext fixref="F-74009r1_fix">Configure the system to notify appropriate support staff immediately upon storage volume utilization reaching 75%.</fixtext><fix id="F-74009r1_fix" /><check system="C-68463r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Review system configuration.
 
-If appropriate support staff are not notified immediately upon storage volume utilization reaching 75%, this is a finding.</check-content></check></Rule></Group><Group id="V-67895"><title>SRG-APP-000360-DB-000320</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82385r1_rule" severity="medium" weight="10.0"><version>SQL4-00-033500</version><title>SQL Server or software monitoring SQL Server must provide an immediate real-time alert to appropriate support staff of all audit failure events requiring real-time alerts.</title><description>&lt;VulnDiscussion&gt;It is critical for the appropriate personnel to be aware if a system is at risk of failing to process audit logs as required. Without a real-time alert, security personnel may be unaware of an impending failure of the audit capability, and system operation may be adversely affected. 
+If appropriate support staff are not notified immediately upon storage volume utilization reaching 75%, this is a finding.</check-content></check></Rule></Group><Group id="V-67895"><title>SRG-APP-000360-DB-000320</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82385r1_rule" severity="medium" weight="10.0"><version>SQL4-00-033500</version><title>SQL Server or software monitoring SQL Server must provide an immediate real-time alert to appropriate support staff of all audit failure events requiring real-time alerts.</title><description>&lt;VulnDiscussion&gt;It is critical for the appropriate personnel to be aware if a system is at risk of failing to process audit logs as required. Without a real-time alert, security personnel may be unaware of an impending failure of the audit capability, and system operation may be adversely affected.
 
 As noted elsewhere in this document, SQL Server's Audit and/or Trace features can be used for auditing purposes.  This requirement applies to both.
 
@@ -1755,7 +1755,7 @@ If the evidence indicates otherwise, this is a finding.</check-content></check><
 
 The nature and requirements of databases will vary; so while users are not permitted to install unapproved software, there may be instances where the organization allows the user to install approved software packages such as from an approved software repository. The requirements for production servers will be more restrictive than those used for development and research.
 
-SQL Server must control software installation by users based upon what types of software installations are permitted (e.g., updates and security patches to existing software) and what types of installations are prohibited (e.g., software whose pedigree with regard to being potentially malicious is unknown or suspect) by the organization). 
+SQL Server must control software installation by users based upon what types of software installations are permitted (e.g., updates and security patches to existing software) and what types of installations are prohibited (e.g., software whose pedigree with regard to being potentially malicious is unknown or suspect) by the organization).
 
 In the case of a database management system, this requirement covers stored procedures, functions, triggers, views, etc.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001812</ident><fixtext fixref="F-74015r1_fix">Document and obtain approval for any non-administrative users who require the ability to create, alter or replace logic modules.
 
@@ -1763,9 +1763,9 @@ Implement the approved permissions. Revoke (or Deny) any unapproved permissions,
 
 Review the SQL Server instance and database security settings with respect to non-administrative users' ability to create, alter, or replace logic modules, to include but not necessarily only stored procedures, functions, triggers, and views.  The database permission functions and views provided in the supplemental file Permissions.sql can help with this.
 
-If any such permissions exist and are not documented and approved, this is a finding.</check-content></check></Rule></Group><Group id="V-67901"><title>SRG-APP-000380-DB-000360</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82391r1_rule" severity="medium" weight="10.0"><version>SQL4-00-033900</version><title>SQL Server and Windows must enforce access restrictions associated with changes to the configuration of the SQL Server instance or database(s).</title><description>&lt;VulnDiscussion&gt;Failure to provide logical access restrictions associated with changes to configuration may have significant effects on the overall security of the system. 
+If any such permissions exist and are not documented and approved, this is a finding.</check-content></check></Rule></Group><Group id="V-67901"><title>SRG-APP-000380-DB-000360</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82391r1_rule" severity="medium" weight="10.0"><version>SQL4-00-033900</version><title>SQL Server and Windows must enforce access restrictions associated with changes to the configuration of the SQL Server instance or database(s).</title><description>&lt;VulnDiscussion&gt;Failure to provide logical access restrictions associated with changes to configuration may have significant effects on the overall security of the system.
 
-When dealing with access restrictions pertaining to change control, it should be noted that any changes to the hardware, software, and/or firmware components of the information system can potentially have significant effects on the overall security of the system. 
+When dealing with access restrictions pertaining to change control, it should be noted that any changes to the hardware, software, and/or firmware components of the information system can potentially have significant effects on the overall security of the system.
 
 Accordingly, SQL Server and Windows must allow only qualified and authorized individuals to obtain access to system components for the purposes of initiating changes, including upgrades and modifications.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-001813</ident><fixtext fixref="F-74017r1_fix">Configure SQL Server to enforce access restrictions associated with changes to the configuration of the SQL Server instance and database(s).</fixtext><fix id="F-74017r1_fix" /><check system="C-68471r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Review the security configuration of the SQL Server instance and database(s).
 
@@ -1773,7 +1773,7 @@ If unauthorized Windows users can start the SQL Server Configuration Manager or 
 
 If SQL Server does not enforce access restrictions associated with changes to the configuration of the SQL Server instance or database(s), this is a finding.
 
-- - - - - 
+- - - - -
 
 To assist in conducting reviews of permissions, the following views and permissions are defined in the supplemental file Permissions.sql, provided with this STIG:
 database_permissions
@@ -1791,7 +1791,7 @@ Permissions of concern in this respect include the following, and possibly other
 - any server permission except CONNECT SQL, but including CONNECT ANY DATABASE
 - any database permission beginning with "CREATE" or "ALTER"
 - CONTROL
-- INSERT, UPDATE, DELETE, EXECUTE on locally-defined tables and procedures designed for supplemental configuration and security purposes.</check-content></check></Rule></Group><Group id="V-67903"><title>SRG-APP-000381-DB-000361</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82393r3_rule" severity="medium" weight="10.0"><version>SQL4-00-034000</version><title>SQL Server must produce Trace or Audit records of its enforcement of access restrictions associated with changes to the configuration of the DBMS or database(s).</title><description>&lt;VulnDiscussion&gt;Without auditing the enforcement of access restrictions against changes to configuration, it would be difficult to identify attempted attacks and an audit trail would not be available for forensic investigation for after-the-fact actions. 
+- INSERT, UPDATE, DELETE, EXECUTE on locally-defined tables and procedures designed for supplemental configuration and security purposes.</check-content></check></Rule></Group><Group id="V-67903"><title>SRG-APP-000381-DB-000361</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82393r3_rule" severity="medium" weight="10.0"><version>SQL4-00-034000</version><title>SQL Server must produce Trace or Audit records of its enforcement of access restrictions associated with changes to the configuration of the DBMS or database(s).</title><description>&lt;VulnDiscussion&gt;Without auditing the enforcement of access restrictions against changes to configuration, it would be difficult to identify attempted attacks and an audit trail would not be available for forensic investigation for after-the-fact actions.
 
 Enforcement actions are the methods or mechanisms used to prevent unauthorized changes to configuration settings. Enforcement action methods may be as simple as denying access to a file based on the application of file permissions (access restriction). Audit items may consist of lists of actions blocked by access restrictions or changes identified after the fact.
 
@@ -1893,11 +1893,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -1952,7 +1952,7 @@ Open SQL Server Configuration Manager from the Windows Start menu or by entering
 
 If any that are not required are shown as enabled, this is a finding.</check-content></check></Rule></Group><Group id="V-67907"><title>SRG-APP-000429-DB-000387</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82397r1_rule" severity="medium" weight="10.0"><version>SQL4-00-034800</version><title>SQL Server must implement and/or support cryptographic mechanisms preventing the unauthorized disclosure of organization-defined information at rest on organization-defined information system components.</title><description>&lt;VulnDiscussion&gt;DBMSs handling data requiring "data at rest" protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest. These cryptographic mechanisms may be native to the DBMS or implemented via additional software or operating system/file system settings, as appropriate to the situation.
 
-Selection of a cryptographic mechanism is based on the need to protect the integrity of organizational information. The strength of the mechanism is commensurate with the security category and/or classification of the information. Organizations have the flexibility to either encrypt all information on storage devices (i.e., full disk encryption) or encrypt specific data structures (e.g., files, records, or fields). 
+Selection of a cryptographic mechanism is based on the need to protect the integrity of organizational information. The strength of the mechanism is commensurate with the security category and/or classification of the information. Organizations have the flexibility to either encrypt all information on storage devices (i.e., full disk encryption) or encrypt specific data structures (e.g., files, records, or fields).
 
 The decision whether and what to encrypt rests with the data owner and is also influenced by the physical measures taken to secure the equipment and media on which the information resides.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-002476</ident><fixtext fixref="F-74023r1_fix">Where full-disk encryption is required, configure Windows and/or the storage system to provide this.
 
@@ -1971,23 +1971,23 @@ In SQL Server Management Studio, Object Explorer, expand the instance and right-
 
 If the value displayed is False, this is a finding.
 
-If column encryption, done via SQL Server features, is required, review the definitions and contents of the relevant tables and columns.  
+If column encryption, done via SQL Server features, is required, review the definitions and contents of the relevant tables and columns.
 
 If any of the information defined as requiring cryptographic protection is not encrypted in a manner that provides the required level of protection, this is a finding.</check-content></check></Rule></Group><Group id="V-67909"><title>SRG-APP-000441-DB-000378</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82399r1_rule" severity="medium" weight="10.0"><version>SQL4-00-035000</version><title>The confidentiality and integrity of information managed by SQL Server must be maintained during preparation for transmission.</title><description>&lt;VulnDiscussion&gt;Information can be either unintentionally or maliciously disclosed or modified during preparation for transmission, including, for example, during aggregation, at protocol transformation points, and during packing/unpacking. These unauthorized disclosures or modifications compromise the confidentiality or integrity of the information.
 
-Use of this requirement will be limited to situations where the data owner has a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process. 
+Use of this requirement will be limited to situations where the data owner has a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process.
 
 When transmitting data, SQL Server, associated applications, and infrastructure must leverage transmission protection mechanisms.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-002420</ident><fixtext fixref="F-74025r1_fix">Implement protective measures against unauthorized disclosure and modification during preparation for transmission.</fixtext><fix id="F-74025r1_fix" /><check system="C-68479r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>If the data owner does not have a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process, this is not a finding.
 
 If SQL Server, associated applications, and infrastructure do not employ protective measures against unauthorized disclosure and modification during preparation for transmission, this is a finding.</check-content></check></Rule></Group><Group id="V-67911"><title>SRG-APP-000442-DB-000379</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82401r1_rule" severity="medium" weight="10.0"><version>SQL4-00-035100</version><title>The confidentiality and integrity of information managed by SQL Server must be maintained during reception.</title><description>&lt;VulnDiscussion&gt;Information can be either unintentionally or maliciously disclosed or modified during reception, including, for example, during aggregation, at protocol transformation points, and during packing/unpacking. These unauthorized disclosures or modifications compromise the confidentiality or integrity of the information.
 
-This requirement applies only to those applications that are either distributed or can allow access to data nonlocally. Use of this requirement will be limited to situations where the data owner has a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process. 
+This requirement applies only to those applications that are either distributed or can allow access to data nonlocally. Use of this requirement will be limited to situations where the data owner has a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process.
 
 When receiving data, SQL Server, associated applications, and infrastructure must leverage protection mechanisms.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-002422</ident><fixtext fixref="F-74027r1_fix">Implement protective measures against unauthorized disclosure and modification during reception.</fixtext><fix id="F-74027r1_fix" /><check system="C-68481r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>If the data owner does not have a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process, this is not a finding.
 
-If SQL Server, associated applications, and infrastructure do not employ protective measures against unauthorized disclosure and modification during reception, this is a finding.</check-content></check></Rule></Group><Group id="V-67913"><title>SRG-APP-000456-DB-000390</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82403r1_rule" severity="medium" weight="10.0"><version>SQL4-00-035400</version><title>Security-relevant software updates to SQL Server must be installed within the time period directed by an authoritative source (e.g., IAVM, CTOs, DTMs, and STIGs).</title><description>&lt;VulnDiscussion&gt;Security flaws with software applications, including database management systems, are discovered daily. Vendors are constantly updating and patching their products to address newly discovered security vulnerabilities. Organizations (including any contractor to the organization) are required to promptly install security-relevant software updates (e.g., patches, service packs, and hot fixes). Flaws discovered during security assessments, continuous monitoring, incident response activities, or information system error handling must also be addressed expeditiously. 
+If SQL Server, associated applications, and infrastructure do not employ protective measures against unauthorized disclosure and modification during reception, this is a finding.</check-content></check></Rule></Group><Group id="V-67913"><title>SRG-APP-000456-DB-000390</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82403r1_rule" severity="medium" weight="10.0"><version>SQL4-00-035400</version><title>Security-relevant software updates to SQL Server must be installed within the time period directed by an authoritative source (e.g., IAVM, CTOs, DTMs, and STIGs).</title><description>&lt;VulnDiscussion&gt;Security flaws with software applications, including database management systems, are discovered daily. Vendors are constantly updating and patching their products to address newly discovered security vulnerabilities. Organizations (including any contractor to the organization) are required to promptly install security-relevant software updates (e.g., patches, service packs, and hot fixes). Flaws discovered during security assessments, continuous monitoring, incident response activities, or information system error handling must also be addressed expeditiously.
 
-Organization-defined time periods for updating security-relevant software may vary based on a variety of factors including, for example, the security category of the information system or the criticality of the update (i.e., severity of the vulnerability related to the discovered flaw). 
+Organization-defined time periods for updating security-relevant software may vary based on a variety of factors including, for example, the security category of the information system or the criticality of the update (i.e., severity of the vulnerability related to the discovered flaw).
 
 Patch criticality, as well as system criticality, will vary. Therefore, the tactical situations regarding the patch management process will also vary. This means that the time period utilized must be a configurable parameter. Time frames for application of security-relevant software updates may be dependent upon the Information Assurance Vulnerability Management (IAVM) process.
 
@@ -1995,7 +1995,7 @@ The application will be configured to check for and install security-relevant so
 
 If such evidence cannot be obtained, or the evidence that is obtained indicates a pattern of noncompliance, this is a finding.</check-content></check></Rule></Group><Group id="V-67915"><title>SRG-APP-000456-DB-000390</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82405r1_rule" severity="medium" weight="10.0"><version>SQL4-00-035500</version><title>Software updates to SQL Server must be tested before being applied to production systems.</title><description>&lt;VulnDiscussion&gt;While it is important to apply SQL Server updates in a timely manner, it is also incumbent upon the database administrator and/or system administrator to ensure that their deployment will not interfere with the operation of the database and its applications.  Other than in emergency situations, SQL Server updates must be applied to appropriately configured non-production systems, and the resulting version of SQL Server assessed for correct operation.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-002605</ident><fixtext fixref="F-74031r1_fix">Institute and adhere to policies and procedures to ensure that SQL Server updates are tested prior to installation on production servers.</fixtext><fix id="F-74031r1_fix" /><check system="C-68485r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Obtain evidence that SQL Server software updates are tested before being applied to production servers, and that any exceptions are approved by the ISSM.
 
-If such evidence cannot be obtained, or the evidence that is obtained indicates a pattern of noncompliance, this is a finding.</check-content></check></Rule></Group><Group id="V-67917"><title>SRG-APP-000492-DB-000332</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82407r2_rule" severity="medium" weight="10.0"><version>SQL4-00-035600</version><title>SQL Server must produce Trace or Audit records when security objects are accessed.</title><description>&lt;VulnDiscussion&gt;Changes to the security configuration must be tracked. 
+If such evidence cannot be obtained, or the evidence that is obtained indicates a pattern of noncompliance, this is a finding.</check-content></check></Rule></Group><Group id="V-67917"><title>SRG-APP-000492-DB-000332</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82407r2_rule" severity="medium" weight="10.0"><version>SQL4-00-035600</version><title>SQL Server must produce Trace or Audit records when security objects are accessed.</title><description>&lt;VulnDiscussion&gt;Changes to the security configuration must be tracked.
 
 This requirement applies to situations where security data is retrieved or modified via data manipulation operations, as opposed to via SQL Server's built-in security functionality (GRANT, REVOKE, DENY, ALTER [SERVER] ROLE ... ADD/DROP MEMBER ..., etc.).
 
@@ -2033,7 +2033,7 @@ If SQL Server Trace is in use for audit purposes, review these tables for the ex
 If such triggers are not present, this is a finding.
 
 Check to see that all required event classes are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -2059,11 +2059,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2093,7 +2093,7 @@ Since the system views are read-only, and the underlying tables are kept hidden 
 
 Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.  Note also that Trace does not support auditing of SELECT statements, whereas Audit does.
 
-Use of SQL Server Audit's SCHEMA_OBJECT_ACCESS_GROUP causes capture of all accesses, successful and otherwise, to all schema-scoped objects.  The [Succeeded] column in the audit output indicates the success or failure of the attempted action.  Be aware, however, that it may report True in some cases where one would intuitively expect False.  For example, SELECT 1/0 FROM SYS.ALL_OBJECTS will appear in the audit trail as successful, if the user has permission to perform that action, even though it contains an invalid expression.  Some other actions that one would consider failures (such as selecting from a table that does not exist) may not appear at all.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000172</ident><fixtext fixref="F-74035r1_fix">Where SQL Server Trace is in use, create triggers to raise a custom event on each table that requires tracking of Insert-Update-Delete operations.  The examples provided in the supplemental file CustomTraceEvents.sql can serve as the basis for these.  
+Use of SQL Server Audit's SCHEMA_OBJECT_ACCESS_GROUP causes capture of all accesses, successful and otherwise, to all schema-scoped objects.  The [Succeeded] column in the audit output indicates the success or failure of the attempted action.  Be aware, however, that it may report True in some cases where one would intuitively expect False.  For example, SELECT 1/0 FROM SYS.ALL_OBJECTS will appear in the audit trail as successful, if the user has permission to perform that action, even though it contains an invalid expression.  Some other actions that one would consider failures (such as selecting from a table that does not exist) may not appear at all.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000172</ident><fixtext fixref="F-74035r1_fix">Where SQL Server Trace is in use, create triggers to raise a custom event on each table that requires tracking of Insert-Update-Delete operations.  The examples provided in the supplemental file CustomTraceEvents.sql can serve as the basis for these.
 
 Add a block of code to the supplemental file Trace.sql for each custom event class (integers in the range 82-91; the same event class may be used for all such triggers) used in these triggers.  Execute Trace.sql.
 
@@ -2111,14 +2111,14 @@ GO</fixtext><fix id="F-74035r1_fix" /><check system="C-68489r3_chk"><check-conte
 
 If neither SQL Server Audit nor SQL Server Trace is in use for audit purposes, this is a finding.
 
-Obtain the list of locally-defined security tables that require tracking of Insert-Update-Delete operations.  
+Obtain the list of locally-defined security tables that require tracking of Insert-Update-Delete operations.
 
 If SQL Server Trace is in use for audit purposes, review these tables for the existence of triggers to raise a custom event on each Insert-Update-Delete operation.
 
 If such triggers are not present, this is a finding.
 
 Check to see that all required event classes are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -2143,11 +2143,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2244,11 +2244,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2281,7 +2281,7 @@ If any locally-defined permissions tables, procedures, or functions exist, and t
 
 If any of the other audit action groups specified in the WHERE clause are not included in the list, this is a finding.
 
-If the audited_result column is not "SUCCESS" or "SUCCESS AND FAILURE" on every row, this is a finding.</check-content></check></Rule></Group><Group id="V-67923"><title>SRG-APP-000495-DB-000327</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82413r2_rule" severity="medium" weight="10.0"><version>SQL4-00-036100</version><title>SQL Server must generate Trace or Audit records when unsuccessful attempts to add privileges/permissions occur.</title><description>&lt;VulnDiscussion&gt;Failed attempts to change the permissions, privileges, and roles granted to users and roles must be tracked. Without an audit trail, unauthorized attempts to elevate or restrict privileges could go undetected. 
+If the audited_result column is not "SUCCESS" or "SUCCESS AND FAILURE" on every row, this is a finding.</check-content></check></Rule></Group><Group id="V-67923"><title>SRG-APP-000495-DB-000327</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82413r2_rule" severity="medium" weight="10.0"><version>SQL4-00-036100</version><title>SQL Server must generate Trace or Audit records when unsuccessful attempts to add privileges/permissions occur.</title><description>&lt;VulnDiscussion&gt;Failed attempts to change the permissions, privileges, and roles granted to users and roles must be tracked. Without an audit trail, unauthorized attempts to elevate or restrict privileges could go undetected.
 
 In SQL Server, adding permissions is typically done via the GRANT command, or, in the negative, DENY; or with the ALTER SERVER ROLE . . . ADD MEMBER . . .,  and/or  ALTER ROLE . . . ADD MEMBER . . . commands.  Native security functionality may be supplemented with application-specific tables and logic, in which case the following actions on these tables and procedures/triggers/functions are also relevant:
 INSERT
@@ -2323,7 +2323,7 @@ GO</fixtext><fix id="F-74039r1_fix" /><check system="C-68493r3_chk"><check-conte
 Obtain the list of locally-defined security tables, procedures and functions (if any) that require tracking.
 
 If SQL Server Trace is in use for audit purposes, verify that all required events are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -2365,11 +2365,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2410,9 +2410,9 @@ EXECUTE
 
 Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000172</ident><fixtext fixref="F-74041r1_fix">Where SQL Server Trace is in use, define and enable a trace that captures all auditable events.  The script provided in the supplemental file Trace.sql can be used to do this.
 
-Add blocks of code to Trace.sql for each custom event class (integers in the range 82-91; the same event class may be used for all such triggers) used in these triggers.  
+Add blocks of code to Trace.sql for each custom event class (integers in the range 82-91; the same event class may be used for all such triggers) used in these triggers.
 
-Create triggers to raise a custom event on each locally-defined security table that requires tracking of Insert-Update-Delete operations.  The examples provided in the supplemental file CustomTraceEvents.sql can serve as the basis for these.  
+Create triggers to raise a custom event on each locally-defined security table that requires tracking of Insert-Update-Delete operations.  The examples provided in the supplemental file CustomTraceEvents.sql can serve as the basis for these.
 
 Execute Trace.sql.
 
@@ -2435,7 +2435,7 @@ If SQL Server Trace is in use for audit purposes, review these tables for the ex
 If such triggers are not present, this is a finding.
 
 Check to see that all required events are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -2473,11 +2473,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2518,9 +2518,9 @@ To aid in diagnosis, it is necessary to keep track of failed attempts in additio
 
 Use of SQL Server Audit is recommended.  All features of SQL Server Audit are available in the Enterprise and Developer editions of SQL Server 2014.  It is not available at the database level in other editions.  For this or legacy reasons, the instance may be using SQL Server Trace for auditing, which remains an acceptable solution for the time being.  Note, however, that Microsoft intends to remove most aspects of Trace at some point after SQL Server 2016.&lt;/VulnDiscussion&gt;&lt;FalsePositives&gt;&lt;/FalsePositives&gt;&lt;FalseNegatives&gt;&lt;/FalseNegatives&gt;&lt;Documentable&gt;false&lt;/Documentable&gt;&lt;Mitigations&gt;&lt;/Mitigations&gt;&lt;SeverityOverrideGuidance&gt;&lt;/SeverityOverrideGuidance&gt;&lt;PotentialImpacts&gt;&lt;/PotentialImpacts&gt;&lt;ThirdPartyTools&gt;&lt;/ThirdPartyTools&gt;&lt;MitigationControl&gt;&lt;/MitigationControl&gt;&lt;Responsibility&gt;&lt;/Responsibility&gt;&lt;IAControls&gt;&lt;/IAControls&gt;</description><reference><dc:title>DPMS Target SQL Server Installation 2014</dc:title><dc:publisher>DISA</dc:publisher><dc:type>DPMS Target</dc:type><dc:subject>SQL Server Installation 2014</dc:subject><dc:identifier>2639</dc:identifier></reference><ident system="http://iase.disa.mil/cci">CCI-000172</ident><fixtext fixref="F-74043r1_fix">Where SQL Server Trace is in use, define and enable a trace that captures all auditable events.  The script provided in the supplemental file Trace.sql can be used to do this.
 
-Add blocks of code to Trace.sql for each custom event class (integers in the range 82-91; the same event class may be used for all such triggers) used in these triggers.  
+Add blocks of code to Trace.sql for each custom event class (integers in the range 82-91; the same event class may be used for all such triggers) used in these triggers.
 
-Create triggers to raise a custom event on each locally-defined security table that requires tracking of Insert-Update-Delete operations.  The examples provided in the supplemental file CustomTraceEvents.sql can serve as the basis for these.  
+Create triggers to raise a custom event on each locally-defined security table that requires tracking of Insert-Update-Delete operations.  The examples provided in the supplemental file CustomTraceEvents.sql can serve as the basis for these.
 
 Execute Trace.sql
 
@@ -2543,7 +2543,7 @@ If SQL Server Trace is in use for audit purposes, review these tables for the ex
 If such triggers are not present, this is a finding.
 
 Check to see that all required events are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -2581,11 +2581,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2635,7 +2635,7 @@ ALTER SERVER AUDIT SPECIFICATION &lt;server_audit_specification_name&gt; WITH (S
 GO</fixtext><fix id="F-74045r1_fix" /><check system="C-68499r3_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>If neither SQL Server Audit nor SQL Server Trace is in use for audit purposes, this is a finding.
 
 If SQL Server Trace is in use for audit purposes, verify that all required events are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -2660,11 +2660,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2717,11 +2717,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2736,7 +2736,7 @@ GO
 
 If no row is returned, this is a finding.
 
-If the audited_result column is not "FAILURE" or "SUCCESS AND FAILURE", this is a finding.</check-content></check></Rule></Group><Group id="V-67933"><title>SRG-APP-000504-DB-000354</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82423r2_rule" severity="medium" weight="10.0"><version>SQL4-00-037700</version><title>SQL Server must generate Trace or Audit records for all privileged activities or other system-level access.</title><description>&lt;VulnDiscussion&gt;Without tracking privileged activity, it would be difficult to establish, correlate, and investigate the events relating to an incident or identify those responsible for one. 
+If the audited_result column is not "FAILURE" or "SUCCESS AND FAILURE", this is a finding.</check-content></check></Rule></Group><Group id="V-67933"><title>SRG-APP-000504-DB-000354</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82423r2_rule" severity="medium" weight="10.0"><version>SQL4-00-037700</version><title>SQL Server must generate Trace or Audit records for all privileged activities or other system-level access.</title><description>&lt;VulnDiscussion&gt;Without tracking privileged activity, it would be difficult to establish, correlate, and investigate the events relating to an incident or identify those responsible for one.
 
 System documentation should include a definition of the functionality considered privileged.
 
@@ -2769,12 +2769,12 @@ For additional actions considered privileged, identify the available event class
 
 Execute Trace.sql.
 
-Define triggers as necessary to support data capture. 
+Define triggers as necessary to support data capture.
 
 Where SQL Server Audit is in use, design and deploy a SQL Server Audit that captures all auditable events.  The script provided in the supplemental file Audit.sql can be used to create an audit; supplement it as necessary to capture any additional, locally-defined privileged activity.</fixtext><fix id="F-74049r1_fix" /><check system="C-68503r3_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>If neither SQL Server Audit nor SQL Server Trace is in use for audit purposes, this is a finding.
 
 If SQL Server Trace is in use for audit purposes, verify that all required events are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed. If no traces are returned, this is a finding.
 
@@ -2818,11 +2818,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2840,7 +2840,7 @@ If the audited_result column is not  "SUCCESS" or "SUCCESS AND FAILURE" on every
 
 If any of the audit action groups listed below is not included in the query results, this is a finding.
 
-If there are locally-defined privileged activities not encompassed by the list below and not tracked in any other way, this is a finding. 
+If there are locally-defined privileged activities not encompassed by the list below and not tracked in any other way, this is a finding.
 
 APPLICATION_ROLE_CHANGE_PASSWORD_GROUP
 AUDIT_CHANGE_GROUP
@@ -2873,7 +2873,7 @@ SERVER_PRINCIPAL_IMPERSONATION_GROUP
 SERVER_ROLE_MEMBER_CHANGE_GROUP
 SERVER_STATE_CHANGE_GROUP
 SUCCESSFUL_LOGIN_GROUP
-TRACE_CHANGE_GROUP</check-content></check></Rule></Group><Group id="V-67935"><title>SRG-APP-000504-DB-000355</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82425r2_rule" severity="medium" weight="10.0"><version>SQL4-00-037800</version><title>SQL Server must generate Trace or Audit records when unsuccessful attempts to execute privileged activities or other system-level access occur.</title><description>&lt;VulnDiscussion&gt;Without tracking privileged activity, it would be difficult to establish, correlate, and investigate the events relating to an incident or identify those responsible for one. 
+TRACE_CHANGE_GROUP</check-content></check></Rule></Group><Group id="V-67935"><title>SRG-APP-000504-DB-000355</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82425r2_rule" severity="medium" weight="10.0"><version>SQL4-00-037800</version><title>SQL Server must generate Trace or Audit records when unsuccessful attempts to execute privileged activities or other system-level access occur.</title><description>&lt;VulnDiscussion&gt;Without tracking privileged activity, it would be difficult to establish, correlate, and investigate the events relating to an incident or identify those responsible for one.
 
 To aid in diagnosis, it is necessary to keep track of failed attempts in addition to the successful ones.
 
@@ -2908,7 +2908,7 @@ For additional actions considered privileged, identify the available event class
 
 Execute Trace.sql.
 
-Define triggers as necessary to support data capture. 
+Define triggers as necessary to support data capture.
 
 Where SQL Server Audit is in use, design and deploy a SQL Server Audit that captures all auditable events.  The script provided in the supplemental file Audit.sql can be used to create an audit; supplement it as necessary to capture any additional, locally-defined privileged activity.</fixtext><fix id="F-74051r1_fix" /><check system="C-68505r3_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>If neither SQL Server Audit nor SQL Server Trace is in use for audit purposes, this is a finding.
 
@@ -2956,11 +2956,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -2978,7 +2978,7 @@ If the audited_result column is not  "FAILURE" or "SUCCESS AND FAILURE" on every
 
 If any of the audit action groups listed below is not included in the query results, this is a finding.
 
-If there are locally-defined privileged activities not encompassed by the list below and not tracked in any other way, this is a finding. 
+If there are locally-defined privileged activities not encompassed by the list below and not tracked in any other way, this is a finding.
 
 APPLICATION_ROLE_CHANGE_PASSWORD_GROUP
 AUDIT_CHANGE_GROUP
@@ -3028,7 +3028,7 @@ ALTER SERVER AUDIT SPECIFICATION &lt;server_audit_specification_name&gt; WITH (S
 GO</fixtext><fix id="F-74053r1_fix" /><check system="C-68507r3_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>If neither SQL Server Audit nor SQL Server Trace is in use for audit purposes, this is a finding.
 
 If SQL Server Trace is in use for audit purposes, verify that all required events are being audited.  From the query prompt:
-SELECT * FROM sys.traces; 
+SELECT * FROM sys.traces;
 
 All currently defined traces for the SQL server instance will be listed.
 
@@ -3053,11 +3053,11 @@ The basic SQL Server Audit configuration provided in the supplemental file Audit
 
 Determine the name(s) of the server audit specification(s) in use.
 
-To look at audits and audit specifications, in Management Studio's object explorer, expand 
+To look at audits and audit specifications, in Management Studio's object explorer, expand
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Audits
 and
 &lt;server name&gt; &gt;&gt; Security &gt;&gt; Server Audit Specifications.
-Also, 
+Also,
 &lt;server name&gt; &gt;&gt; Databases &gt;&gt; &lt;database name&gt; &gt;&gt; Security &gt;&gt; Database Audit Specifications.
 
 Alternatively, review the contents of the system views with "audit" in their names.
@@ -3102,7 +3102,7 @@ The following required event IDs should be among those listed; if not, this is a
 
 If SQL Server Audit is in use, verify that the SUCCESSFUL_LOGIN_GROUP and LOGOUT_GROUP are enabled, as described in other STIG requirements; if not, this is a finding.</check-content></check></Rule></Group><Group id="V-67941"><title>SRG-APP-000515-DB-000318</title><description>&lt;GroupDescription&gt;&lt;/GroupDescription&gt;</description><Rule id="SV-82431r1_rule" severity="medium" weight="10.0"><version>SQL4-00-038700</version><title>SQL Server must off-load audit data to a separate log management facility; this must be continuous and in near real time for systems with a network connection to the storage facility and weekly or more often for stand-alone systems.</title><description>&lt;VulnDiscussion&gt;Information stored in one location is vulnerable to accidental or incidental deletion or alteration.
 
-Off-loading is a common process in information systems with limited audit storage capacity. 
+Off-loading is a common process in information systems with limited audit storage capacity.
 
 The DBMS may write audit records to database tables, to files in the file system, to other kinds of local repository, or directly to a centralized log management system. Whatever the method used, it must be compatible with off-loading the records to the centralized system.
 
@@ -3114,7 +3114,7 @@ If the database server  does not have a continuous network connection to the cen
 
 The DoD standard for authentication is DoD-approved PKI certificates.  Authentication based on User ID and Password may be used only when it is not possible to employ a PKI certificate, and requires AO approval.
 
-In such cases, the DoD standards for password complexity must be implemented.  
+In such cases, the DoD standards for password complexity must be implemented.
 
 The requirements for password complexity are:
 a. minimum of 15 Characters, 1 of each of the following character sets:
@@ -3131,12 +3131,12 @@ Alternatively, for each identified Login, run the statement:
 ALTER LOGIN &lt;login name&gt; CHECK_POLICY = ON;</fixtext><fix id="F-74059r1_fix" /><check system="C-68513r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Run the statement:
 SELECT
     name
-FROM 
-    sys.sql_logins 
+FROM
+    sys.sql_logins
 WHERE
     type_desc = 'SQL_LOGIN'
     AND is_disabled = 0
-    AND is_policy_checked = 0 ; 
+    AND is_policy_checked = 0 ;
 
 If no account names are listed, this is not a finding.
 
@@ -3144,7 +3144,7 @@ For each account name listed, determine whether it is documented as requiring ex
 
 The DoD standard for authentication is DoD-approved PKI certificates.  Authentication based on User ID and Password may be used only when it is not possible to employ a PKI certificate, and requires AO approval.
 
-In such cases, the DoD standards for password lifetime must be implemented.  
+In such cases, the DoD standards for password lifetime must be implemented.
 
 The requirements for password lifetime are:
 a. Password lifetime limits for interactive accounts:  Minimum 24 hours, Maximum 60 days
@@ -3158,12 +3158,12 @@ Alternatively, for each identified Login, run the statement:
 ALTER LOGIN &lt;login name&gt;  CHECK_EXPIRATION = ON;</fixtext><fix id="F-74061r1_fix" /><check system="C-68515r1_chk"><check-content-ref name="M" href="DPMS_XCCDF_Benchmark_MS_SQL_Server_2014_Instance_STIG.xml" /><check-content>Run the statement:
 SELECT
     name
-FROM 
-    sys.sql_logins 
+FROM
+    sys.sql_logins
 WHERE
     type_desc = 'SQL_LOGIN'
     AND is_disabled = 0
-    AND is_expiration_checked = 0; 
+    AND is_expiration_checked = 0;
 
 If no account names are listed, this is not a finding.
 
